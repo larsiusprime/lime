@@ -288,7 +288,6 @@ namespace lime {
 		if (path) {
 			
 			value _path = alloc_string (path);
-			free ((char*) path);
 			return _path;
 			
 		} else {
@@ -310,7 +309,6 @@ namespace lime {
 		if (path) {
 			
 			value _path = alloc_string (path);
-			free ((char*) path);
 			return _path;
 			
 		} else {
@@ -356,7 +354,6 @@ namespace lime {
 		if (path) {
 			
 			value _path = alloc_string (path);
-			free ((char*) path);
 			return _path;
 			
 		} else {
