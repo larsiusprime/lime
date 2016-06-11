@@ -17,7 +17,7 @@
 	<set name="LIME_HARFBUZZ" value="1" />
 	<set name="LIME_LZMA" value="1" />
 	<!-- <set name="LIME_NEKO" value="1" if="linux" /> -->
-	<set name="LIME_NFD" value="1" if="windows || mac" />
+	<set name="LIME_TFD" value="1" if="windows || mac || linux"/>
 	<set name="LIME_OGG" value="1" />
 	<set name="LIME_OPENAL" value="1" unless="static_link" />
 	<set name="LIME_OPENAL" value="1" if="iphone || android || emscripten || tvos" />
@@ -117,10 +117,10 @@
 			
 		</section>
 		
-		<section if="LIME_NFD">
+		<section if="LIME_TFD">
 			
-			<compilerflag value="-I${NATIVE_TOOLKIT_PATH}/nfd/src/include/" />
-			<compilerflag value="-DLIME_NFD" />
+			<compilerflag value="-I${NATIVE_TOOLKIT_PATH}/tinyfiledialogs/" />
+			<compilerflag value="-DLIME_TFD" />
 			
 			<file name="src/ui/FileDialog.cpp" />
 			

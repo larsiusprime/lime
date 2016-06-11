@@ -282,7 +282,7 @@ namespace lime {
 	
 	value lime_file_dialog_open_directory (HxString filter, HxString defaultPath) {
 		
-		#ifdef LIME_NFD
+		#ifdef LIME_TFD
 		const char* path = FileDialog::OpenDirectory (filter.__s, defaultPath.__s);
 		
 		if (path) {
@@ -304,7 +304,7 @@ namespace lime {
 	
 	value lime_file_dialog_open_file (HxString filter, HxString defaultPath) {
 		
-		#ifdef LIME_NFD
+		#ifdef LIME_TFD
 		const char* path = FileDialog::OpenFile (filter.__s, defaultPath.__s);
 		
 		if (path) {
@@ -327,7 +327,7 @@ namespace lime {
 	
 	value lime_file_dialog_open_files (HxString filter, HxString defaultPath) {
 		
-		#ifdef LIME_NFD
+		#ifdef LIME_TFD
 		std::vector<const char*> files;
 		
 		FileDialog::OpenFiles (&files, filter.__s, defaultPath.__s);
@@ -350,7 +350,7 @@ namespace lime {
 	
 	value lime_file_dialog_save_file (HxString filter, HxString defaultPath) {
 		
-		#ifdef LIME_NFD
+		#ifdef LIME_TFD
 		const char* path = FileDialog::SaveFile (filter.__s, defaultPath.__s);
 		
 		if (path) {
