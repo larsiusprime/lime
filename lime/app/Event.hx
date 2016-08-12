@@ -161,6 +161,32 @@ class Event<T> {
 					}
 					
 				}
+			
+			}
+			
+			if (Context.defined("crashdumper")) {
+				
+				dispatch = macro {
+					
+					if (crashdumper.CrashDumper.active) {
+						
+						try {
+							
+							$e{dispatch} 
+							
+						}catch (msg:Dynamic) {
+							
+							__catchError(msg); 
+							
+						}
+						
+					}
+					else {
+						
+						$e{dispatch}
+						
+					}
+				}
 				
 			}
 			
@@ -280,4 +306,17 @@ class Event<T> {
 	}
 	
 	
+	#if crashdumper
+	private static function __catchError(msg:Dynamic) {
+		
+		if (Event.dispatchErrorEventCallback != null) {
+			
+			Event.dispatchErrorEventCallback(msg);
+			
+		}
+		
+	}
+	
+	public static var dispatchErrorEventCallback:Dynamic->Void = null;
+	#end
 }
