@@ -80,6 +80,7 @@ class Image {
 	public var src (get, set):Dynamic;
 	public var transparent (get, set):Bool;
 	public var type:ImageType;
+	public var version:Int;
 	public var width:Int;
 	public var x:Float;
 	public var y:Float;
@@ -91,6 +92,8 @@ class Image {
 		this.offsetY = offsetY;
 		this.width = width;
 		this.height = height;
+		
+		version = 0;
 		
 		if (type == null) {
 			
@@ -169,15 +172,20 @@ class Image {
 		
 		if (buffer != null) {
 			
-			if (type == CANVAS && buffer.__srcImage == null) {
+			#if (js && html5)
+			if (type == CANVAS) {
 				
 				ImageCanvasUtil.convertToCanvas (this);
-				ImageCanvasUtil.sync (this, true);
+				
+			} else {
+				
+				ImageCanvasUtil.convertToData (this);
 				
 			}
+			#end
 			
 			var image = new Image (buffer.clone (), offsetX, offsetY, width, height, null, type);
-			image.dirty = dirty;
+			image.version = version;
 			return image;
 			
 		} else {
@@ -300,12 +308,12 @@ class Image {
 		//draw area starts too far left or too far above destination image boundaries
 		if (destPoint.x < 0) {
 			sourceRect.width += destPoint.x;	//shrink width by amount off canvas
-			sourceRect.x = -destPoint.x;		//adjust source rect to effective starting point
+			sourceRect.x -= destPoint.x;		//adjust source rect to effective starting point
 			destPoint.x = 0;					//clamp destination point to 0
 		}
 		if (destPoint.y < 0) {
 			sourceRect.height += destPoint.y;	//shrink height by amount off canvas
-			sourceRect.y = -destPoint.y;		//adjust source rect to effective starting point
+			sourceRect.y -= destPoint.y;		//adjust source rect to effective starting point
 			destPoint.y = 0;					//clamp destination point to 0
 		}
 		
@@ -496,13 +504,16 @@ class Image {
 		if (canvas == null) return null;
 		var buffer = new ImageBuffer (null, canvas.width, canvas.height);
 		buffer.src = canvas;
-		return new Image (buffer);
+		var image = new Image (buffer);
+		image.type = CANVAS;
+		return image;
 		
 	}
 	
 	
 	public static function fromFile (path:String, onload:Image -> Void = null, onerror:Void -> Void = null):Image {
 		
+		if (path == null) return null;
 		var image = new Image ();
 		image.__fromFile (path, onload, onerror);
 		return image;
@@ -519,9 +530,12 @@ class Image {
 		if (image == null) return null;
 		var buffer = new ImageBuffer (null, image.width, image.height);
 		buffer.src = image;
-		return new Image (buffer);
+		var _image = new Image (buffer);
+		_image.type = CANVAS;
+		return _image;
 		
 	}
+	
 	
 	public function getColorBoundsRect (mask:Int, color:Int, findColor:Bool = true, format:PixelFormat = null):Rectangle {
 		
@@ -1084,7 +1098,6 @@ class Image {
 		
 		#if (js && html5)
 		var image = new JSImage ();
-		image.crossOrigin = "Anonymous";
 		
 		var image_onLoaded = function (event) {
 			
@@ -1399,9 +1412,7 @@ class Image {
 			
 			#if (js && html5)
 				
-				ImageCanvasUtil.convertToCanvas (this);
-				ImageCanvasUtil.sync (this, false);
-				ImageCanvasUtil.createImageData (this);
+				ImageCanvasUtil.convertToData (this);
 				
 			#elseif flash
 				
@@ -1522,7 +1533,7 @@ class Image {
 			
 			switch (type) {
 				
-				case DATA:
+				case CANVAS, DATA:
 					
 					#if (js && html5)
 					ImageCanvasUtil.convertToData (this);

@@ -23,7 +23,7 @@ typedef WindowConfig = {
 	
 	@:optional var allowHighDPI:Bool;
 	@:optional var antialiasing:Int;
-	@:optional var background:Int;
+	@:optional var background:Null<Int>;
 	@:optional var borderless:Bool;
 	@:optional var depthBuffer:Bool;
 	@:optional var display:Int;
@@ -33,6 +33,9 @@ typedef WindowConfig = {
 	@:optional var fullscreen:Bool;
 	@:optional var hardware:Bool;
 	@:optional var height:Int;
+	@:optional var hidden:Bool;
+	@:optional var maximized:Bool;
+	@:optional var minimized:Bool;
 	@:optional var parameters:String;
 	@:optional var resizable:Bool;
 	@:optional var stencilBuffer:Bool;

@@ -358,6 +358,8 @@ class NativeApplication {
 		
 		for (renderer in parent.renderers) {
 			
+			if (renderer == null) continue;
+			
 			parent.renderer = renderer;
 			
 			switch (renderEventInfo.type) {
@@ -520,13 +522,7 @@ class NativeApplication {
 				
 				case WINDOW_CLOSE:
 					
-					window.onClose.dispatch ();
-					
-					if (!window.onClose.canceled) {
-						
-						window.close ();
-						
-					}
+					window.close ();
 				
 				case WINDOW_DEACTIVATE:
 					
