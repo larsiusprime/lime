@@ -332,6 +332,19 @@ class Application extends Module {
 	}
 	
 	
+	#if crashdumper
+	private static function __catchError(msg:Dynamic) {
+		
+		if (Application.dispatchErrorEventCallback != null) {
+			
+			Application.dispatchErrorEventCallback(msg);
+			
+		}
+		
+	}
+	
+	public static var dispatchErrorEventCallback:Dynamic->Void = null;
+	#end
 }
 
 

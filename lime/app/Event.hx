@@ -65,10 +65,10 @@ class Event<T> {
 		var typeArgs;
 		var typeResult;
 		
-		switch (Context.getLocalType ()) {
-			
-			case TInst (_, [ TFun (args, result) ]):
-				
+		switch (Context.follow(Context.getLocalType ())) {
+		
+			case TInst(_, [ Context.follow(_) => TFun(args, result) ]):
+		
 				typeArgs = args;
 				typeResult = result;
 				
@@ -176,7 +176,7 @@ class Event<T> {
 							
 						}catch (msg:Dynamic) {
 							
-							__catchError(msg); 
+							@:privateAccess Application.__catchError(msg); 
 							
 						}
 						
@@ -304,19 +304,4 @@ class Event<T> {
 		#end
 		
 	}
-	
-	
-	#if crashdumper
-	private static function __catchError(msg:Dynamic) {
-		
-		if (Event.dispatchErrorEventCallback != null) {
-			
-			Event.dispatchErrorEventCallback(msg);
-			
-		}
-		
-	}
-	
-	public static var dispatchErrorEventCallback:Dynamic->Void = null;
-	#end
 }

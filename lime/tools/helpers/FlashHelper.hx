@@ -73,9 +73,8 @@ class FlashHelper {
 			
 			if (!FileSystem.exists (src)) {
 				
-				Sys.println ("Warning: Could not embed unsupported audio file \"" + name + "\", embedding as binary");
-				inAsset.type = BINARY;
-				return embedAsset (inAsset, packageName, outTags);
+				Sys.println ("Warning: Could not embed unsupported audio file \"" + name + "\"");
+				return false;
 				
 			}
 			
@@ -97,25 +96,22 @@ class FlashHelper {
 					switch (reader.readNext()) {
 						case Frame(frame):
 						if (frame.header.layer != mpeg.audio.Layer.Layer3) {
-							Sys.println ("Warning: Could not embed \"" + name + "\" (Flash only supports Layer-III MP3 files, but file is " + frame.header.layer + "), embedding as binary");
-							inAsset.type = BINARY;
-							return embedAsset (inAsset, packageName, outTags);
+							Sys.println ("Warning: Could not embed \"" + name + "\" (Flash only supports Layer-III MP3 files, but file is " + frame.header.layer + ")");
+							return false;
 						}
 						var frameSamplingFrequency = frame.header.samplingFrequency;
 						if (samplingFrequency == -1) {
 							samplingFrequency = frameSamplingFrequency;
 						} else if (frameSamplingFrequency != samplingFrequency) {
-							Sys.println ("Warning: Could not embed \"" + name + "\" (Flash does not support MP3 audio with variable sampling frequencies), embedding as binary");
-							inAsset.type = BINARY;
-							return embedAsset (inAsset, packageName, outTags);
+							Sys.println ("Warning: Could not embed \"" + name + "\" (Flash does not support MP3 audio with variable sampling frequencies)");
+							return false;
 						}
 						var frameIsStereo = frame.header.mode != mpeg.audio.Mode.SingleChannel;
 						if (isStereo == null) {
 							isStereo = frameIsStereo;
 						} else if (frameIsStereo != isStereo) {
-							Sys.println ("Warning: Could not embed \"" + name + "\" (Flash does not support MP3 audio with mixed mono and stero frames), embedding as binary");
-							inAsset.type = BINARY;
-							return embedAsset (inAsset, packageName, outTags);
+							Sys.println ("Warning: Could not embed \"" + name + "\" (Flash does not support MP3 audio with mixed mono and stero frames)");
+							return false;
 						}
 						frameDataWriter.write(frame.frameData);
 						totalLengthSamples += mpeg.audio.Utils.lookupSamplesPerFrame(frame.header.version, frame.header.layer);
@@ -131,9 +127,8 @@ class FlashHelper {
 				}
 				
 				if (totalLengthSamples == 0) {
-					Sys.println ("Warning: Could not embed \"" + name + "\" (Could not find any valid MP3 audio data), embedding as binary");
-					inAsset.type = BINARY;
-					return embedAsset (inAsset, packageName, outTags);
+					Sys.println ("Warning: Could not embed \"" + name + "\" (Could not find any valid MP3 audio data)");
+					return false;
 				}
 				
 				var flashSamplingFrequency = switch (samplingFrequency) {
@@ -145,9 +140,8 @@ class FlashHelper {
 				
 				if (flashSamplingFrequency == null) {
 					
-					Sys.println ("Warning: Could not embed \"" + name + "\" (Flash supports 11025, 22050 and 44100kHz MP3 files, but file is " + samplingFrequency + "kHz), embedding as binary");
-					inAsset.type = BINARY;
-					return embedAsset (inAsset, packageName, outTags);
+					Sys.println ("Warning: Could not embed \"" + name + "\" (Flash supports 11025, 22050 and 44100kHz MP3 files, but file is " + samplingFrequency + "kHz)");
+					return false;
 					
 				}
 				
@@ -171,15 +165,13 @@ class FlashHelper {
 				
 				if (ext == "ogg" || header == "OggS") {
 					
-					Sys.println ("Warning: Skipping unsupported OGG file \"" + name + "\", embedding as binary");
-					inAsset.type = BINARY;
-					return embedAsset (inAsset, packageName, outTags);
+					Sys.println ("Warning: Skipping unsupported OGG file \"" + name + "\"");
+					return false;
 					
 				} else if (header != "RIFF") {
 					
-					Sys.println ("Warning: Could not embed unrecognized WAV file \"" + name + "\", embedding as binary");
-					inAsset.type = BINARY;
-					return embedAsset (inAsset, packageName, outTags);
+					Sys.println ("Warning: Could not embed unrecognized WAV file \"" + name + "\"");
+					return false;
 					
 				} else {
 					
@@ -192,9 +184,8 @@ class FlashHelper {
 					
 					if (hdr.format != WF_PCM) {
 						
-						Sys.println ("Warning: Could not embed \"" + name + "\" (Only PCM uncompressed WAV files are currently supported), embedding as binary");
-						inAsset.type = BINARY;
-						return embedAsset (inAsset, packageName, outTags);
+						Sys.println ("Warning: Could not embed \"" + name + "\" (Only PCM uncompressed WAV files are currently supported)");
+						return false;
 						
 					}
 					
@@ -211,9 +202,8 @@ class FlashHelper {
 					
 					if (flashRate == null) {
 						
-						Sys.println ("Warning: Could not embed \"" + name + "\" (Flash supports 5512, 11025, 22050 and 44100kHz WAV files, but file is " + hdr.samplingRate + "kHz), embedding as binary");
-						inAsset.type = BINARY;
-						return embedAsset (inAsset, packageName, outTags);
+						Sys.println ("Warning: Could not embed \"" + name + "\" (Flash supports 5512, 11025, 22050 and 44100kHz WAV files, but file is " + hdr.samplingRate + "kHz)");
+						return false;
 						
 					}
 					
@@ -255,9 +245,8 @@ class FlashHelper {
 						
 					} else {
 						
-						Sys.println ("Warning: Could not embed WAV file \"" + name + "\", the file may be corrupted, embedding as binary");
-						inAsset.type = BINARY;
-						return embedAsset (inAsset, packageName, outTags);
+						Sys.println ("Warning: Could not embed WAV file \"" + name + "\", the file may be corrupted");
+						return false;
 						
 					}
 					
@@ -300,9 +289,7 @@ class FlashHelper {
 					
 				} else {
 					
-					Sys.println ("Warning: Could not embed image file \"" + name + "\", unknown image type, embedding as binary");
-					inAsset.type = BINARY;
-					return embedAsset (inAsset, packageName, outTags);
+					throw ("Unknown image type:" + src );
 					
 				}
 				
@@ -606,31 +593,22 @@ class FlashHelper {
 	}
 	
 	
-	private static function compileSWC (project:HXProject, assets:Array<Asset>, id:Int, destination:String):Void {
+	private static function compileSWC (project:HXProject, assets:Array<Asset>, id:Int):Void {
 		
 		#if format
-		destination = destination + "/obj";
+		var destination = project.app.path + "/flash/obj";
 		PathHelper.mkdir (destination);
 		
 		var label = (id > 0 ? Std.string (id + 1) : "");
 		
 		var swfVersions = [ 9, 10, /*10.1,*/ 10.2, 10.3, 11, 11.1, 11.2, 11.3, 11.4, 11.5, 11.6, 11.7, 11.8, 12, 13, 14 ];
-		
 		var flashVersion = 9;
 		
-		if (project.app.swfVersion > 14) {
+		for (swfVersion in swfVersions) {
 			
-			flashVersion += Std.int ((swfVersions.length - 1) + (project.app.swfVersion - 14));
-			
-		} else {
-			
-			for (swfVersion in swfVersions) {
+			if (project.app.swfVersion > swfVersion) {
 				
-				if (project.app.swfVersion > swfVersion) {
-					
-					flashVersion++;
-					
-				}
+				flashVersion++;
 				
 			}
 			
@@ -760,7 +738,7 @@ class FlashHelper {
 	}*/
 	
 	
-	public static function embedAssets (project:HXProject, targetDirectory:String):Bool {
+	public static function embedAssets (project:HXProject):Bool {
 		
 		var embed = "";
 		var assets = [];
@@ -857,6 +835,13 @@ class FlashHelper {
 					
 				}
 				
+				if ((asset.type == SOUND || asset.type == MUSIC) && Path.extension (sourcePath) == "ogg") {
+					
+					Sys.println ("Warning: Skipping unsupported OGG file \"" + sourcePath + "\"");
+					ignoreAsset = true;
+					
+				}
+				
 				if (ignoreAsset) {
 					
 					embed += "@:keep class __ASSET__" + asset.flatName + " extends " + flashClass + " { }\n";
@@ -884,7 +869,7 @@ class FlashHelper {
 		if (embed != "") {
 			
 			//compileSWC (project, embed, id);
-			compileSWC (project, assets, id, targetDirectory);
+			compileSWC (project, assets, id);
 			
 		}
 		
@@ -900,7 +885,7 @@ class FlashHelper {
 		
 		if (assets.length > 0) {
 			
-			project.haxeflags.push ("-swf-lib " + targetDirectory + "/obj/assets.swf");
+			project.haxeflags.push ("-swf-lib " + project.app.path + "/flash/obj/assets.swf");
 			project.haxedefs.set ("flash-use-stage", "");
 			
 			return true;

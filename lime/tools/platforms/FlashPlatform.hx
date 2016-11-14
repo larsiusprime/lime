@@ -8,8 +8,6 @@ import lime.tools.helpers.CompatibilityHelper;
 import lime.tools.helpers.DeploymentHelper;
 import lime.tools.helpers.FileHelper;
 import lime.tools.helpers.FlashHelper;
-import lime.tools.helpers.HTML5Helper;
-import lime.tools.helpers.LogHelper;
 import lime.tools.helpers.PathHelper;
 import lime.tools.helpers.PlatformHelper;
 import lime.tools.helpers.ProcessHelper;
@@ -37,8 +35,8 @@ class FlashPlatform extends PlatformTarget {
 		
 		super (command, _project, targetFlags);
 		
-		targetDirectory = project.app.path + "/flash/" + buildType;
-
+		targetDirectory = project.app.path + "/flash";
+		
 	}
 	
 	
@@ -46,9 +44,21 @@ class FlashPlatform extends PlatformTarget {
 		
 		var destination = targetDirectory + "/bin";
 		
+		var type = "release";
+		
+		if (project.debug) {
+			
+			type = "debug";
+			
+		} else if (project.targetFlags.exists ("final")) {
+			
+			type = "final";
+			
+		}
+		
 		if (embedded) {
 			
-			var hxml = File.getContent (targetDirectory + "/haxe/" + buildType + ".hxml");
+			var hxml = File.getContent (targetDirectory + "/haxe/" + type + ".hxml");
 			var args = new Array<String> ();
 			
 			for (line in ~/[\r\n]+/g.split (hxml)) {
@@ -76,12 +86,12 @@ class FlashPlatform extends PlatformTarget {
 				}
 				
 			}
-			
+				
 			ProcessHelper.runCommand ("", "haxe", args);
 			
 		} else {
 			
-			var hxml = targetDirectory + "/haxe/" + buildType + ".hxml";
+			var hxml = targetDirectory + "/haxe/" + type + ".hxml";
 			ProcessHelper.runCommand ("", "haxe", [ hxml ] );
 			
 		}
@@ -129,16 +139,25 @@ class FlashPlatform extends PlatformTarget {
 	
 	public override function display ():Void {
 		
-		var hxml = PathHelper.findTemplate (project.templatePaths, "flash/hxml/" + buildType + ".hxml");
+		var type = "release";
+		
+		if (project.debug) {
+			
+			type = "debug";
+			
+		} else if (project.targetFlags.exists ("final")) {
+			
+			type = "final";
+			
+		}
+		
+		var hxml = PathHelper.findTemplate (project.templatePaths, "flash/hxml/" + type + ".hxml");
 		
 		var context = project.templateContext;
 		context.WIN_FLASHBACKGROUND = StringTools.hex (project.window.background, 6);
-		context.OUTPUT_DIR = targetDirectory;
 		
 		var template = new Template (File.getContent (hxml));
-		
 		Sys.println (template.execute (context));
-		Sys.println ("-D display");
 		
 	}
 	
@@ -153,14 +172,8 @@ class FlashPlatform extends PlatformTarget {
 			
 		}
 		
-		if (LogHelper.verbose) {
-			
-			project.haxedefs.set ("verbose", 1);
-			
-		}
-		
 		var context = project.templateContext;
-		context.WIN_FLASHBACKGROUND = project.window.background != null ? StringTools.hex (project.window.background, 6) : "0xFFFFFF";
+		context.WIN_FLASHBACKGROUND = StringTools.hex (project.window.background, 6);
 		var assets:Array <Dynamic> = cast context.assets;
 		
 		for (asset in assets) {
@@ -204,26 +217,24 @@ class FlashPlatform extends PlatformTarget {
 			
 			if (project.targetFlags.exists ("web")) {
 				
-				HTML5Helper.launch (project, targetDirectory + "/bin");
+				targetPath = "index.html";
+				
+			}
+			
+			if (traceEnabled) {
+				
+				#if neko Thread.create (function () { #end
+					
+					FlashHelper.run (project, destination, targetPath);
+					Sys.exit (0);
+					
+				#if neko }); #end
+				
+				Sys.sleep (0.1);
 				
 			} else {
 				
-				if (traceEnabled) {
-					
-					#if neko Thread.create (function () { #end
-						
-						FlashHelper.run (project, destination, targetPath);
-						Sys.exit (0);
-						
-					#if neko }); #end
-					
-					Sys.sleep (0.1);
-					
-				} else {
-					
-					FlashHelper.run (project, destination, targetPath);
-					
-				}
+				FlashHelper.run (project, destination, targetPath);
 				
 			}
 			
@@ -237,10 +248,9 @@ class FlashPlatform extends PlatformTarget {
 		var destination = targetDirectory + "/bin/";
 		PathHelper.mkdir (destination);
 		
-		embedded = FlashHelper.embedAssets (project, targetDirectory);
+		embedded = FlashHelper.embedAssets (project);
 		
 		var context = generateContext ();
-		context.OUTPUT_DIR = targetDirectory;
 		
 		FileHelper.recursiveCopyTemplate (project.templatePaths, "haxe", targetDirectory + "/haxe", context);
 		FileHelper.recursiveCopyTemplate (project.templatePaths, "flash/hxml", targetDirectory + "/haxe", context);
@@ -248,23 +258,23 @@ class FlashPlatform extends PlatformTarget {
 		
 		//SWFHelper.generateSWFClasses (project, targetDirectory + "/haxe");
 		
-		//var usesLime = false;
-		//
-		//for (haxelib in project.haxelibs) {
-			//
-			//if (haxelib.name == "lime") {
-				//
-				//usesLime = true;
-				//
-			//}
-			//
-			//if (haxelib.name == "openfl") {
-				//
-				//CompatibilityHelper.patchAssetLibrary (project, haxelib, targetDirectory + "/haxe/DefaultAssetLibrary.hx", context);
-				//
-			//}
-			//
-		//}
+		var usesNME = false;
+		
+		for (haxelib in project.haxelibs) {
+			
+			if (haxelib.name == "nme" || haxelib.name == "openfl") {
+				
+				usesNME = true;
+				
+			}
+			
+			if (haxelib.name == "openfl") {
+				
+				CompatibilityHelper.patchAssetLibrary (project, haxelib, targetDirectory + "/haxe/DefaultAssetLibrary.hx", context);
+				
+			}
+			
+		}
 		
 		if (project.targetFlags.exists ("web") || project.app.url != "") {
 			
@@ -275,7 +285,7 @@ class FlashPlatform extends PlatformTarget {
 		
 		for (asset in project.assets) {
 			
-			if (asset.type == AssetType.TEMPLATE || asset.embed == false /*|| !usesLime*/) {
+			if (asset.type == AssetType.TEMPLATE || asset.embed == false || !usesNME) {
 				
 				var path = PathHelper.combine (destination, asset.targetPath);
 				
@@ -291,7 +301,6 @@ class FlashPlatform extends PlatformTarget {
 	
 	public override function trace ():Void {
 		
-		FlashHelper.enableLogging ();
 		FlashHelper.tailLog (0);
 		
 	}
