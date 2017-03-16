@@ -811,7 +811,6 @@ abstract Matrix4(Float32Array) from Float32Array to Float32Array {
 		_swap(1, 4);
 		_swap(2, 8);
 		_swap(3, 12);
-		_swap(4, 1);
 		_swap(6, 9);
 		_swap(7, 13);
 		_swap(11, 14);
