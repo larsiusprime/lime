@@ -259,33 +259,33 @@ abstract Matrix4(Float32Array) from Float32Array to Float32Array {
 			
 			matrix[ 0 ] = a;
 			matrix[ 1 ] = b;
-			matrix[ 2 ] = 0;
-			matrix[ 3 ] = 0;
+			matrix[ 2 ] = 0.0;
+			matrix[ 3 ] = 0.0;
 			
 			matrix[ 4 ] = c;
 			matrix[ 5 ] = d;
-			matrix[ 6 ] = 0;
-			matrix[ 7 ] = 0;
+			matrix[ 6 ] = 0.0;
+			matrix[ 7 ] = 0.0;
 			
-			matrix[ 8 ] = 0;
-			matrix[ 9 ] = 0;
-			matrix[ 10 ] = 1;
-			matrix[ 11 ] = 0;
+			matrix[ 8 ] = 0.0;
+			matrix[ 9 ] = 0.0;
+			matrix[ 10 ] = 1.0;
+			matrix[ 11 ] = 0.0;
 			
 			matrix[ 12 ] = tx;
 			matrix[ 13 ] = ty;
-			matrix[ 14 ] = 0;
-			matrix[ 15 ] = 1;
+			matrix[ 14 ] = 0.0;
+			matrix[ 15 ] = 1.0;
 			
 			return matrix;
 			
 		}
 		
 		return new Matrix4 (new Float32Array ([
-			a, b, 0, 0,
-			c, d, 0, 0,
-			0, 0, 1, 0,
-			tx,ty,0, 1
+			  a,   b, 0.0, 0.0,
+			  c,   d, 0.0, 0.0,
+			0.0, 0.0, 1.0, 0.0,
+			  tx,  ty,0.0, 1.0
 		]));
 		
 	}
