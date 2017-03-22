@@ -317,6 +317,20 @@ class Image {
 			destPoint.y = 0;					//clamp destination point to 0
 		}
 		
+		//fast path -- just directly copy pixels as-is from source to destination
+		if (width == sourceImage.width && height == sourceImage.height && 
+		    sourceRect.width == sourceImage.width && sourceRect.height == sourceImage.height && 
+		    sourceRect.x == 0 && sourceRect.y == 0 && destPoint.x == 0 && destPoint.y == 0 && 
+		    alphaImage == null && alphaPoint == null && mergeAlpha == false && format == sourceImage.format) {
+			
+			//Sys.println("Image.copyPixels() fast path!");
+			buffer.data.buffer.blit(0, sourceImage.buffer.data.toBytes(), 0, buffer.data.byteLength);
+			dirty = true;
+			version++;
+			return;
+		}
+		
+				
 		switch (type) {
 			
 			case CANVAS:
