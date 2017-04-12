@@ -31,6 +31,8 @@ namespace lime {
 		int _length;
 		value *_root;
 		value _value;
+
+		static void StaticInit ();
 		
 		
 	};

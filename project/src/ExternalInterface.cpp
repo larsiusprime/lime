@@ -9,6 +9,7 @@
 
 #include <hx/CFFIPrimePatch.h>
 //#include <hx/CFFIPrime.h>
+#include <lime_field_ids.h>
 #include <app/Application.h>
 #include <app/ApplicationEvent.h>
 #include <audio/format/OGG.h>
@@ -1755,7 +1756,12 @@ namespace lime {
 	DEFINE_PRIME2 (lime_window_set_title);
 	DEFINE_PRIME1 (lime_zlib_compress);
 	DEFINE_PRIME1 (lime_zlib_decompress);
-	
+
+	namespace field_ids {
+#define DECLARE_LIME_FIELD_ID(s) int id_##s
+#include <lime_field_ids_list.h>
+#undef DECLARE_LIME_FIELD_ID
+	}
 	
 }
 
@@ -1791,6 +1797,15 @@ extern "C" int lime_register_prims () {
 	lime_curl_register_prims ();
 	lime_openal_register_prims ();
 	lime_opengl_register_prims ();
+
+	// val_id is not thread safe, so initialize as early as possible rather
+	// than lazily.
+
+#define DECLARE_LIME_FIELD_ID(s) lime::field_ids::id_##s = val_id(#s)
+#include <lime_field_ids_list.h>
+#undef DECLARE_LIME_FIELD_ID
+
+	lime::Bytes::StaticInit();
 	
 	return 0;
 	

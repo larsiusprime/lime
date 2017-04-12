@@ -1,5 +1,9 @@
+#include <lime_field_ids.h>
 #include <hx/CFFI.h>
 #include <ui/DropEvent.h>
+
+
+using namespace lime::field_ids;
 
 
 namespace lime {
@@ -7,10 +11,6 @@ namespace lime {
 	
 	AutoGCRoot* DropEvent::callback = 0;
 	AutoGCRoot* DropEvent::eventObject = 0;
-	
-	static int id_file;
-	static int id_type;
-	static bool init = false;
 	
 	
 	DropEvent::DropEvent () {
@@ -24,14 +24,6 @@ namespace lime {
 	void DropEvent::Dispatch (DropEvent* event) {
 		
 		if (DropEvent::callback) {
-			
-			if (!init) {
-				
-				id_file = val_id ("file");
-				id_type = val_id ("type");
-				init = true;
-				
-			}
 			
 			value object = (DropEvent::eventObject ? DropEvent::eventObject->get () : alloc_empty_object ());
 			

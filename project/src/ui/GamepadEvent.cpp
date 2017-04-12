@@ -1,5 +1,9 @@
+#include <lime_field_ids.h>
 #include <hx/CFFI.h>
 #include <ui/GamepadEvent.h>
+
+
+using namespace lime::field_ids;
 
 
 namespace lime {
@@ -7,14 +11,6 @@ namespace lime {
 	
 	AutoGCRoot* GamepadEvent::callback = 0;
 	AutoGCRoot* GamepadEvent::eventObject = 0;
-	
-	static double id_axis;
-	static int id_button;
-	static int id_id;
-	static int id_type;
-	static int id_value;
-	static bool init = false;
-	
 	
 	GamepadEvent::GamepadEvent () {
 		
@@ -30,17 +26,6 @@ namespace lime {
 	void GamepadEvent::Dispatch (GamepadEvent* event) {
 		
 		if (GamepadEvent::callback) {
-			
-			if (!init) {
-				
-				id_axis = val_id ("axis");
-				id_button = val_id ("button");
-				id_id = val_id ("id");
-				id_type = val_id ("type");
-				id_value = val_id ("value");
-				init = true;
-				
-			}
 			
 			value object = (GamepadEvent::eventObject ? GamepadEvent::eventObject->get () : alloc_empty_object ());
 			

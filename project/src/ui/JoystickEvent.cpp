@@ -1,5 +1,9 @@
+#include <lime_field_ids.h>
 #include <hx/CFFI.h>
 #include <ui/JoystickEvent.h>
+
+
+using namespace lime::field_ids;
 
 
 namespace lime {
@@ -7,14 +11,6 @@ namespace lime {
 	
 	AutoGCRoot* JoystickEvent::callback = 0;
 	AutoGCRoot* JoystickEvent::eventObject = 0;
-	
-	static int id_id;
-	static int id_index;
-	static int id_type;
-	static int id_value;
-	static int id_x;
-	static int id_y;
-	static bool init = false;
 	
 	
 	JoystickEvent::JoystickEvent () {
@@ -32,18 +28,6 @@ namespace lime {
 	void JoystickEvent::Dispatch (JoystickEvent* event) {
 		
 		if (JoystickEvent::callback) {
-			
-			if (!init) {
-				
-				id_id = val_id ("id");
-				id_index = val_id ("index");
-				id_type = val_id ("type");
-				id_value = val_id ("value");
-				id_x = val_id ("x");
-				id_y = val_id ("y");
-				init = true;
-				
-			}
 			
 			value object = (JoystickEvent::eventObject ? JoystickEvent::eventObject->get () : alloc_empty_object ());
 			

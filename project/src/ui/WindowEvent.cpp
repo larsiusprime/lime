@@ -1,5 +1,9 @@
+#include <lime_field_ids.h>
 #include <hx/CFFI.h>
 #include <ui/WindowEvent.h>
+
+
+using namespace lime::field_ids;
 
 
 namespace lime {
@@ -7,14 +11,6 @@ namespace lime {
 	
 	AutoGCRoot* WindowEvent::callback = 0;
 	AutoGCRoot* WindowEvent::eventObject = 0;
-	
-	static int id_height;
-	static int id_type;
-	static int id_width;
-	static int id_windowID;
-	static int id_x;
-	static int id_y;
-	static bool init = false;
 	
 	
 	WindowEvent::WindowEvent () {
@@ -33,18 +29,6 @@ namespace lime {
 	void WindowEvent::Dispatch (WindowEvent* event) {
 		
 		if (WindowEvent::callback) {
-			
-			if (!init) {
-				
-				id_height = val_id ("height");
-				id_type = val_id ("type");
-				id_width = val_id ("width");
-				id_windowID = val_id ("windowID");
-				id_x = val_id ("x");
-				id_y = val_id ("y");
-				init = true;
-				
-			}
 			
 			value object = (WindowEvent::eventObject ? WindowEvent::eventObject->get () : alloc_empty_object ());
 			

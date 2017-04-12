@@ -1,5 +1,9 @@
+#include <lime_field_ids.h>
 #include <hx/CFFI.h>
 #include <ui/TextEvent.h>
+
+
+using namespace lime::field_ids;
 
 
 namespace lime {
@@ -7,13 +11,6 @@ namespace lime {
 	
 	AutoGCRoot* TextEvent::callback = 0;
 	AutoGCRoot* TextEvent::eventObject = 0;
-	
-	static int id_length;
-	static int id_start;
-	static int id_text;
-	static int id_type;
-	static int id_windowID;
-	static bool init = false;
 	
 	
 	TextEvent::TextEvent () {
@@ -28,17 +25,6 @@ namespace lime {
 	void TextEvent::Dispatch (TextEvent* event) {
 		
 		if (TextEvent::callback) {
-			
-			if (!init) {
-				
-				id_length = val_id ("length");
-				id_start = val_id ("start");
-				id_text = val_id ("text");
-				id_type = val_id ("type");
-				id_windowID = val_id ("windowID");
-				init = true;
-				
-			}
 			
 			value object = (TextEvent::eventObject ? TextEvent::eventObject->get () : alloc_empty_object ());
 			

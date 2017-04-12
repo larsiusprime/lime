@@ -1,5 +1,6 @@
 #include <cairo.h>
 #include <cairo-ft.h>
+#include <lime_field_ids.h>
 #include <math/Matrix3.h>
 #include <math/Vector2.h>
 #include <hx/CFFIPrimePatch.h>
@@ -8,13 +9,12 @@
 #include <text/Font.h>
 
 
+using namespace lime::field_ids;
+
+
 namespace lime {
 	
 	
-	static int id_index;
-	static int id_x;
-	static int id_y;
-	static bool init = false;
 	cairo_user_data_key_t userData;
 	
 	
@@ -907,14 +907,6 @@ namespace lime {
 	
 	
 	void lime_cairo_show_glyphs (value handle, value glyphs) {
-		
-		if (!init) {
-			
-			id_index = val_id ("index");
-			id_x = val_id ("x");
-			id_y = val_id ("y");
-			
-		}
 		
 		int length = val_array_size (glyphs);
 		cairo_glyph_t* _glyphs = cairo_glyph_allocate (length);

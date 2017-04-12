@@ -1,16 +1,11 @@
+#include <lime_field_ids.h>
 #include <math/Matrix3.h>
 
 
+using namespace lime::field_ids;
+
+
 namespace lime {
-	
-	
-	static int id_a;
-	static int id_b;
-	static int id_c;
-	static int id_d;
-	static int id_tx;
-	static int id_ty;
-	static bool init = false;
 	
 	
 	Matrix3::Matrix3 () {
@@ -38,18 +33,6 @@ namespace lime {
 	
 	
 	Matrix3::Matrix3 (value mat3) {
-		
-		if (!init) {
-			
-			id_a = val_id ("a");
-			id_b = val_id ("b");
-			id_c = val_id ("c");
-			id_d = val_id ("d");
-			id_tx = val_id ("tx");
-			id_ty = val_id ("ty");
-			init = true;
-			
-		}
 		
 		a = val_number (val_field (mat3, id_a));
 		b = val_number (val_field (mat3, id_b));

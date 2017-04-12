@@ -1,41 +1,31 @@
+#include <lime_field_ids.h>
 #include <system/System.h>
 #include <utils/Bytes.h>
+
+
+using namespace lime::field_ids;
 
 
 namespace lime {
 	
 	
-	static int id_b;
-	static int id_length;
-	static bool init = false;
 	static bool useBuffer = false;
 	
 	
-	inline void initialize () {
+	void Bytes::StaticInit () {
 		
-		if (!init) {
+		buffer b = alloc_buffer_len (1);
+		
+		if (buffer_data (b)) {
 			
-			id_b = val_id ("b");
-			id_length = val_id ("length");
-			
-			buffer b = alloc_buffer_len (1);
-			
-			if (buffer_data (b)) {
-				
-				useBuffer = true;
-				
-			}
-			
-			init = true;
+			useBuffer = true;
 			
 		}
-		
+			
 	}
 	
 	
 	Bytes::Bytes () {
-		
-		initialize ();
 		
 		_data = 0;
 		_length = 0;
@@ -46,8 +36,6 @@ namespace lime {
 	
 	
 	Bytes::Bytes (int size) {
-		
-		initialize ();
 		
 		_data = 0;
 		_length = 0;
@@ -61,8 +49,6 @@ namespace lime {
 	
 	Bytes::Bytes (value bytes) {
 		
-		initialize ();
-		
 		_data = 0;
 		_length = 0;
 		_value = 0;
@@ -74,8 +60,6 @@ namespace lime {
 	
 	
 	Bytes::Bytes (const char* path) {
-		
-		initialize ();
 		
 		_data = 0;
 		_length = 0;
@@ -107,8 +91,6 @@ namespace lime {
 	
 	
 	Bytes::Bytes (const QuickVec<unsigned char> data) {
-		
-		initialize ();
 		
 		_data = 0;
 		_length = 0;

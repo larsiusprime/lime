@@ -1,7 +1,11 @@
+#include <lime_field_ids.h>
 #include "SDLWindow.h"
 #include "SDLRenderer.h"
 #include "../../graphics/opengl/OpenGL.h"
 #include "../../graphics/opengl/OpenGLBindings.h"
+
+
+using namespace lime::field_ids;
 
 
 namespace lime {
@@ -171,10 +175,10 @@ namespace lime {
 		
 		if (SDL_LockTexture (sdlTexture, NULL, &pixels, &pitch) == 0) {
 			
-			alloc_field (result, val_id ("width"), alloc_int (width));
-			alloc_field (result, val_id ("height"), alloc_int (height));
-			alloc_field (result, val_id ("pixels"), alloc_float ((intptr_t)pixels));
-			alloc_field (result, val_id ("pitch"), alloc_int (pitch));
+			alloc_field (result, id_width, alloc_int (width));
+			alloc_field (result, id_height, alloc_int (height));
+			alloc_field (result, id_pixels, alloc_float ((intptr_t)pixels));
+			alloc_field (result, id_pitch, alloc_int (pitch));
 			
 		}
 		

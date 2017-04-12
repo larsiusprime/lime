@@ -1,3 +1,4 @@
+#include <lime_field_ids.h>
 #include <hx/CFFIPrimePatch.h>
 //#include <hx/CFFIPrime.h>
 #include <system/CFFIPointer.h>
@@ -19,6 +20,9 @@
 #ifdef LIME_SDL
 #include <SDL.h>
 #endif
+
+
+using namespace lime::field_ids;
 
 
 namespace lime {
@@ -570,9 +574,9 @@ namespace lime {
 		
 		glGetActiveAttrib (reinterpret_cast<uintptr_t> (val_data (handle)), inIndex, 1024, &outLen, &size, &type, buf);
 		
-		alloc_field (result, val_id ("size"), alloc_int (size));
-		alloc_field (result, val_id ("type"), alloc_int (type));
-		alloc_field (result, val_id ("name"), alloc_string (buf));
+		alloc_field (result, id_size, alloc_int (size));
+		alloc_field (result, id_type, alloc_int (type));
+		alloc_field (result, id_name, alloc_string (buf));
 		
 		return result;
 		
@@ -589,9 +593,9 @@ namespace lime {
 		glGetActiveUniform (reinterpret_cast<uintptr_t> (val_data (handle)), inIndex, 1024, &outLen, &size, &type, buf);
 		
 		value result = alloc_empty_object ();
-		alloc_field (result, val_id ("size"), alloc_int (size));
-		alloc_field (result, val_id ("type"), alloc_int (type));
-		alloc_field (result, val_id ("name"), alloc_string (buf));
+		alloc_field (result, id_size, alloc_int (size));
+		alloc_field (result, id_type, alloc_int (type));
+		alloc_field (result, id_name, alloc_string (buf));
 		
 		return result;
 		
@@ -618,10 +622,10 @@ namespace lime {
 		
 		value result = alloc_empty_object ();
 		
-		alloc_field (result, val_id ("alpha"), alloc_bool (true));
-		alloc_field (result, val_id ("depth"), alloc_bool (true));
-		alloc_field (result, val_id ("stencil"), alloc_bool (true));
-		alloc_field (result, val_id ("antialias"), alloc_bool (true));
+		alloc_field (result, id_alpha, alloc_bool (true));
+		alloc_field (result, id_depth, alloc_bool (true));
+		alloc_field (result, id_stencil, alloc_bool (true));
+		alloc_field (result, id_antialias, alloc_bool (true));
 		
 		return result;
 		
@@ -905,9 +909,9 @@ namespace lime {
 		glGetShaderPrecisionFormat (shaderType, inPrec, range, &precision);
 		
 		value result = alloc_empty_object ();
-		alloc_field (result, val_id ("rangeMin"), alloc_int (range[0]));
-		alloc_field (result, val_id ("rangeMax"), alloc_int (range[1]));
-		alloc_field (result, val_id ("precision"), alloc_int (precision));
+		alloc_field (result, id_rangeMin, alloc_int (range[0]));
+		alloc_field (result, id_rangeMax, alloc_int (range[1]));
+		alloc_field (result, id_precision, alloc_int (precision));
 		return result;
 		
 		#else

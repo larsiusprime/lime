@@ -1,3 +1,4 @@
+#include <lime_field_ids.h>
 #include <system/JNI.h>
 #include <utils/Object.h>
 #include <hx/CFFIPrimePatch.h>
@@ -16,6 +17,9 @@
 #else
 #define JAVA_EXPORT JNIEXPORT
 #endif
+
+
+using namespace lime::field_ids;
 
 
 namespace lime {
@@ -599,15 +603,7 @@ namespace lime {
 			
 		}
 		
-		static int id__jobject = -1;
-		
-		if (id__jobject < 0) {
-			
-			id__jobject = val_id ("__jobject");
-			
-		}
-		
-		value jobj = val_field (inValue, id__jobject);
+		value jobj = val_field (inValue, id___jobject);
 		
 		if (val_is_null (jobj)) {
 			

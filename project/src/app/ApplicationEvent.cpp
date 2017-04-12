@@ -1,5 +1,9 @@
+#include <lime_field_ids.h>
 #include <hx/CFFI.h>
 #include <app/ApplicationEvent.h>
+
+
+using namespace lime::field_ids;
 
 
 namespace lime {
@@ -7,10 +11,6 @@ namespace lime {
 	
 	AutoGCRoot* ApplicationEvent::callback = 0;
 	AutoGCRoot* ApplicationEvent::eventObject = 0;
-	
-	static int id_deltaTime;
-	static int id_type;
-	static bool init = false;
 	
 	
 	ApplicationEvent::ApplicationEvent () {
@@ -24,14 +24,6 @@ namespace lime {
 	void ApplicationEvent::Dispatch (ApplicationEvent* event) {
 		
 		if (ApplicationEvent::callback) {
-			
-			if (!init) {
-				
-				id_deltaTime = val_id ("deltaTime");
-				id_type = val_id ("type");
-				init = true;
-				
-			}
 			
 			value object = (ApplicationEvent::eventObject ? ApplicationEvent::eventObject->get () : alloc_empty_object ());
 			

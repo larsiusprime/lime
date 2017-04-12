@@ -1,14 +1,11 @@
+#include <lime_field_ids.h>
 #include <math/Rectangle.h>
 
 
+using namespace lime::field_ids;
+
+
 namespace lime {
-	
-	
-	static int id_height;
-	static int id_width;
-	static int id_x;
-	static int id_y;
-	static bool init = false;
 	
 	
 	Rectangle::Rectangle () {
@@ -32,16 +29,6 @@ namespace lime {
 	
 	
 	Rectangle::Rectangle (value rect) {
-		
-		if (!init) {
-			
-			id_height = val_id ("height");
-			id_width = val_id ("width");
-			id_x = val_id ("x");
-			id_y = val_id ("y");
-			init = true;
-			
-		}
 		
 		width = val_number (val_field (rect, id_width));
 		height = val_number (val_field (rect, id_height));
@@ -71,16 +58,6 @@ namespace lime {
 	
 	
 	value Rectangle::Value () {
-		
-		if (!init) {
-			
-			id_height = val_id ("height");
-			id_width = val_id ("width");
-			id_x = val_id ("x");
-			id_y = val_id ("y");
-			init = true;
-			
-		}
 		
 		value rect = alloc_empty_object ();
 		alloc_field (rect, id_height, alloc_float (height));

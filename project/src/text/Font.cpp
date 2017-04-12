@@ -1,3 +1,4 @@
+#include <lime_field_ids.h>
 #include <text/Font.h>
 #include <graphics/ImageBuffer.h>
 #include <system/System.h>
@@ -15,6 +16,9 @@
 #include FT_GLYPH_H
 #include FT_OUTLINE_H
 #endif
+
+
+using namespace lime::field_ids;
 
 
 // from http://stackoverflow.com/questions/2948308/how-do-i-read-utf-8-characters-via-a-pointer
@@ -266,60 +270,6 @@ namespace {
 namespace lime {
 	
 	
-	static int id_buffer;
-	static int id_charCode;
-	static int id_codepoint;
-	static int id_height;
-	static int id_index;
-	static int id_horizontalAdvance;
-	static int id_horizontalBearingX;
-	static int id_horizontalBearingY;
-	static int id_image;
-	static int id_offset;
-	static int id_offsetX;
-	static int id_offsetY;
-	static int id_size;
-	static int id_verticalAdvance;
-	static int id_verticalBearingX;
-	static int id_verticalBearingY;
-	static int id_width;
-	static int id_x;
-	static int id_y;
-	static bool init = false;
-	
-	
-	static void initialize () {
-		
-		if (!init) {
-			
-			id_width = val_id ("width");
-			id_height = val_id ("height");
-			id_x = val_id ("x");
-			id_y = val_id ("y");
-			id_offset = val_id ("offset");
-			id_size = val_id ("size");
-			id_codepoint = val_id ("codepoint");
-			
-			id_buffer = val_id ("buffer");
-			id_charCode = val_id ("charCode");
-			id_horizontalAdvance = val_id ("horizontalAdvance");
-			id_horizontalBearingX = val_id ("horizontalBearingX");
-			id_horizontalBearingY = val_id ("horizontalBearingY");
-			id_image = val_id ("image");
-			id_index = val_id ("index");
-			id_offsetX = val_id ("offsetX");
-			id_offsetY = val_id ("offsetY");
-			id_verticalAdvance = val_id ("verticalAdvance");
-			id_verticalBearingX = val_id ("verticalBearingX");
-			id_verticalBearingY = val_id ("verticalBearingY");
-			
-			init = true;
-			
-		}
-		
-	}
-	
-	
 	Font::Font (Resource *resource, int faceIndex) {
 		
 		this->library = 0;
@@ -531,18 +481,18 @@ namespace lime {
 		wchar_t* family_name = GetFamilyName ();
 		
 		value ret = alloc_empty_object ();
-		alloc_field (ret, val_id ("has_kerning"), alloc_bool (FT_HAS_KERNING (((FT_Face)face))));
-		alloc_field (ret, val_id ("is_fixed_width"), alloc_bool (FT_IS_FIXED_WIDTH (((FT_Face)face))));
-		alloc_field (ret, val_id ("has_glyph_names"), alloc_bool (FT_HAS_GLYPH_NAMES (((FT_Face)face))));
-		alloc_field (ret, val_id ("is_italic"), alloc_bool (((FT_Face)face)->style_flags & FT_STYLE_FLAG_ITALIC));
-		alloc_field (ret, val_id ("is_bold"), alloc_bool (((FT_Face)face)->style_flags & FT_STYLE_FLAG_BOLD));
-		alloc_field (ret, val_id ("num_glyphs"), alloc_int (num_glyphs));
-		alloc_field (ret, val_id ("family_name"), family_name == NULL ? alloc_string (((FT_Face)face)->family_name) : alloc_wstring (family_name));
-		alloc_field (ret, val_id ("style_name"), alloc_string (((FT_Face)face)->style_name));
-		alloc_field (ret, val_id ("em_size"), alloc_int (((FT_Face)face)->units_per_EM));
-		alloc_field (ret, val_id ("ascend"), alloc_int (((FT_Face)face)->ascender));
-		alloc_field (ret, val_id ("descend"), alloc_int (((FT_Face)face)->descender));
-		alloc_field (ret, val_id ("height"), alloc_int (((FT_Face)face)->height));
+		alloc_field (ret, id_has_kerning, alloc_bool (FT_HAS_KERNING (((FT_Face)face))));
+		alloc_field (ret, id_is_fixed_width, alloc_bool (FT_IS_FIXED_WIDTH (((FT_Face)face))));
+		alloc_field (ret, id_has_glyph_names, alloc_bool (FT_HAS_GLYPH_NAMES (((FT_Face)face))));
+		alloc_field (ret, id_is_italic, alloc_bool (((FT_Face)face)->style_flags & FT_STYLE_FLAG_ITALIC));
+		alloc_field (ret, id_is_bold, alloc_bool (((FT_Face)face)->style_flags & FT_STYLE_FLAG_BOLD));
+		alloc_field (ret, id_num_glyphs, alloc_int (num_glyphs));
+		alloc_field (ret, id_family_name, family_name == NULL ? alloc_string (((FT_Face)face)->family_name) : alloc_wstring (family_name));
+		alloc_field (ret, id_style_name, alloc_string (((FT_Face)face)->style_name));
+		alloc_field (ret, id_em_size, alloc_int (((FT_Face)face)->units_per_EM));
+		alloc_field (ret, id_ascend, alloc_int (((FT_Face)face)->ascender));
+		alloc_field (ret, id_descend, alloc_int (((FT_Face)face)->descender));
+		alloc_field (ret, id_height, alloc_int (((FT_Face)face)->height));
 		
 		delete family_name;
 		
@@ -563,19 +513,19 @@ namespace lime {
 			
 			value item = alloc_empty_object ();
 			val_array_set_i (neko_glyphs, i, item);
-			alloc_field (item, val_id ("char_code"), alloc_int (g->char_code));
-			alloc_field (item, val_id ("advance"), alloc_int (g->metrics.horiAdvance));
-			alloc_field (item, val_id ("min_x"), alloc_int (g->metrics.horiBearingX));
-			alloc_field (item, val_id ("max_x"), alloc_int (g->metrics.horiBearingX + g->metrics.width));
-			alloc_field (item, val_id ("min_y"), alloc_int (g->metrics.horiBearingY - g->metrics.height));
-			alloc_field (item, val_id ("max_y"), alloc_int (g->metrics.horiBearingY));
-			alloc_field (item, val_id ("points"), points);
+			alloc_field (item, id_char_code, alloc_int (g->char_code));
+			alloc_field (item, id_advance, alloc_int (g->metrics.horiAdvance));
+			alloc_field (item, id_min_x, alloc_int (g->metrics.horiBearingX));
+			alloc_field (item, id_max_x, alloc_int (g->metrics.horiBearingX + g->metrics.width));
+			alloc_field (item, id_min_y, alloc_int (g->metrics.horiBearingY - g->metrics.height));
+			alloc_field (item, id_max_y, alloc_int (g->metrics.horiBearingY));
+			alloc_field (item, id_points, points);
 			
 			delete g;
 			
 		}
 		
-		alloc_field (ret, val_id ("glyphs"), neko_glyphs);
+		alloc_field (ret, id_glyphs, neko_glyphs);
 		
 		// 'kerning' field
 		if (FT_HAS_KERNING (((FT_Face)face))) {
@@ -588,18 +538,18 @@ namespace lime {
 				
 				value item = alloc_empty_object();
 				val_array_set_i (neko_kerning,i,item);
-				alloc_field (item, val_id ("left_glyph"), alloc_int (k->l_glyph));
-				alloc_field (item, val_id ("right_glyph"), alloc_int (k->r_glyph));
-				alloc_field (item, val_id ("x"), alloc_int (k->x));
-				alloc_field (item, val_id ("y"), alloc_int (k->y));
+				alloc_field (item, id_left_glyph, alloc_int (k->l_glyph));
+				alloc_field (item, id_right_glyph, alloc_int (k->r_glyph));
+				alloc_field (item, id_x, alloc_int (k->x));
+				alloc_field (item, id_y, alloc_int (k->y));
 				
 			}
 			
-			alloc_field (ret, val_id ("kerning"), neko_kerning);
+			alloc_field (ret, id_kerning, neko_kerning);
 			
 		} else {
 			
-			alloc_field (ret, val_id ("kerning"), alloc_null ());
+			alloc_field (ret, id_kerning, alloc_null ());
 			
 		}
 		
@@ -706,8 +656,6 @@ namespace lime {
 	
 	
 	value Font::GetGlyphMetrics (int index) {
-		
-		initialize ();
 		
 		if (FT_Load_Glyph ((FT_Face)face, index, FT_LOAD_NO_BITMAP | FT_LOAD_FORCE_AUTOHINT | FT_LOAD_DEFAULT) == 0) {
 			

@@ -1,6 +1,10 @@
+#include <lime_field_ids.h>
 #include <vm/NekoVM.h>
 #include <stdio.h>
 #include <neko_vm.h>
+
+
+using namespace lime::field_ids;
 
 
 extern "C" { void std_main (); }
@@ -55,7 +59,7 @@ namespace lime {
 		value args2[] = { alloc_string(modulePath), mload };
 		value exc = NULL;
 		
-		val_callEx(mload,val_field(mload,val_id("loadmodule")),args2,2,&exc);
+		val_callEx(mload,val_field(mload,id_loadmodule),args2,2,&exc);
 		
 		if( exc != NULL ) {
 			

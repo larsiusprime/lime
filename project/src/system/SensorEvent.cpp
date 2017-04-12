@@ -1,5 +1,9 @@
+#include <lime_field_ids.h>
 #include <hx/CFFI.h>
 #include <system/SensorEvent.h>
+
+
+using namespace lime::field_ids;
 
 
 namespace lime {
@@ -7,13 +11,6 @@ namespace lime {
 	
 	AutoGCRoot* SensorEvent::callback = 0;
 	AutoGCRoot* SensorEvent::eventObject = 0;
-	
-	static int id_id;
-	static int id_type;
-	static int id_x;
-	static int id_y;
-	static int id_z;
-	static bool init = false;
 	
 	
 	SensorEvent::SensorEvent () {
@@ -30,17 +27,6 @@ namespace lime {
 	void SensorEvent::Dispatch (SensorEvent* event) {
 		
 		if (SensorEvent::callback) {
-			
-			if (!init) {
-				
-				id_id = val_id ("id");
-				id_type = val_id ("type");
-				id_x = val_id ("x");
-				id_y = val_id ("y");
-				id_z = val_id ("z");
-				init = true;
-				
-			}
 			
 			value object = (SensorEvent::eventObject ? SensorEvent::eventObject->get () : alloc_empty_object ());
 			

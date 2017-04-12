@@ -1,3 +1,4 @@
+#include <lime_field_ids.h>
 #include <graphics/PixelFormat.h>
 #include <math/Rectangle.h>
 #include <system/Clipboard.h>
@@ -32,6 +33,9 @@
 
 #include <SDL.h>
 #include <string>
+
+
+using namespace lime::field_ids;
 
 
 namespace lime {
@@ -230,21 +234,6 @@ namespace lime {
 	
 	
 	value System::GetDisplay (int id) {
-		
-		if (!init) {
-			
-			id_bounds = val_id ("bounds");
-			id_currentMode = val_id ("currentMode");
-			id_dpi = val_id ("dpi");
-			id_height = val_id ("height");
-			id_name = val_id ("name");
-			id_pixelFormat = val_id ("pixelFormat");
-			id_refreshRate = val_id ("refreshRate");
-			id_supportedModes = val_id ("supportedModes");
-			id_width = val_id ("width");
-			init = true;
-			
-		}
 		
 		int numDisplays = GetNumDisplays ();
 		

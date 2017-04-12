@@ -1,14 +1,11 @@
+#include <lime_field_ids.h>
 #include <audio/AudioBuffer.h>
 
 
+using namespace lime::field_ids;
+
+
 namespace lime {
-	
-	
-	static int id_bitsPerSample;
-	static int id_channels;
-	static int id_data;
-	static int id_sampleRate;
-	static bool init = false;
 	
 	
 	AudioBuffer::AudioBuffer () {
@@ -29,16 +26,6 @@ namespace lime {
 	
 	
 	value AudioBuffer::Value () {
-		
-		if (!init) {
-			
-			id_bitsPerSample = val_id ("bitsPerSample");
-			id_channels = val_id ("channels");
-			id_data = val_id ("data");
-			id_sampleRate = val_id ("sampleRate");
-			init = true;
-			
-		}
 		
 		mValue = alloc_empty_object ();
 		alloc_field (mValue, id_bitsPerSample, alloc_int (bitsPerSample));

@@ -1,12 +1,12 @@
+#include <lime_field_ids.h>
 #include <math/ColorMatrix.h>
 #include <utils/Bytes.h>
 
 
+using namespace lime::field_ids;
+
+
 namespace lime {
-	
-	
-	static int id_buffer;
-	static bool init = false;
 	
 	
 	ColorMatrix::ColorMatrix () {
@@ -29,13 +29,6 @@ namespace lime {
 	
 	
 	ColorMatrix::ColorMatrix (value colorMatrix) {
-		
-		if (!init) {
-			
-			id_buffer = val_id ("buffer");
-			init = true;
-			
-		}
 		
 		value buffer_value = val_field (colorMatrix, id_buffer);
 		Bytes bytes;
