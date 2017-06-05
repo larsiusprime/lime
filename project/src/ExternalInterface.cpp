@@ -1810,3 +1810,20 @@ extern "C" int lime_register_prims () {
 	return 0;
 	
 }
+
+
+#if !defined(STATIC_LINK)
+
+struct StaticInitFieldIds {
+	StaticInitFieldIds() {
+		printf("lime init field ids\n");
+#define DECLARE_LIME_FIELD_ID(s) lime::field_ids::id_##s = val_id(#s)
+#include <lime_field_ids_list.h>
+#undef DECLARE_LIME_FIELD_ID
+		lime::Bytes::StaticInit();
+	}
+};
+
+StaticInitFieldIds s_staticInitFieldIds;
+
+#endif
