@@ -1816,7 +1816,6 @@ extern "C" int lime_register_prims () {
 
 struct StaticInitFieldIds {
 	StaticInitFieldIds() {
-		printf("lime init field ids\n");
 #define DECLARE_LIME_FIELD_ID(s) lime::field_ids::id_##s = val_id(#s)
 #include <lime_field_ids_list.h>
 #undef DECLARE_LIME_FIELD_ID
