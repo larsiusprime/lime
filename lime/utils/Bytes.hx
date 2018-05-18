@@ -58,6 +58,11 @@ class Bytes extends HaxeBytes {
 	
 	public static function readFile (path:String):Bytes {
 		
+		#if sys
+		var data:haxe.io.Bytes = sys.io.File.getBytes(path);
+		if (data != null) return new Bytes(data.length, data.b);
+		#end
+		
 		#if (!html5 && !macro)
 		var data:Dynamic = lime_bytes_read_file (path);
 		if (data != null) return new Bytes (data.length, data.b);
