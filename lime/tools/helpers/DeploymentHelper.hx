@@ -10,7 +10,7 @@ class DeploymentHelper {
 	public static function deploy (project:HXProject, targetFlags:Map<String, String>, targetDirectory:String, targetName:String) {
 		
 		var name = project.meta.title + " (" + project.meta.version + " build " + project.meta.buildNumber + ") (" + targetName + ").zip";
-		var targetPath = PathHelper.combine (targetDirectory + "/dist", name);
+		var targetPath = PathHelper.combine (targetDirectory + "/dist", sanitize(name));
 		
 		trace("DeploymentHelper.deploy() name = " + name + " targetDirectory = " + targetDirectory + " targetPath = " + targetPath);
 		
@@ -40,6 +40,20 @@ class DeploymentHelper {
 			
 		}
 		
+	}
+	
+	
+	private static function sanitize(str:String):String
+	{
+		var chars1 = [":", "/", "\\", "*", "?", "<", ">", "|"];
+		var chars2 = ["-", "-",  "-", "_", "_", "_", "_", "_"];
+		for (i in 0...chars1.length)
+		{
+			var char1 = chars1[i];
+			var char2 = chars2[i];
+			str = StringTools.replace(str, char1, char2);
+		}
+		return str;
 	}
 	
 	
