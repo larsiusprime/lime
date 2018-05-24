@@ -12,8 +12,6 @@ class DeploymentHelper {
 		var name = project.meta.title + " (" + project.meta.version + " build " + project.meta.buildNumber + ") (" + targetName + ").zip";
 		var targetPath = PathHelper.combine (targetDirectory + "/dist", sanitize(name));
 		
-		trace("DeploymentHelper.deploy() name = " + name + " targetDirectory = " + targetDirectory + " targetPath = " + targetPath);
-		
 		ZipHelper.compress (PathHelper.combine (targetDirectory, "bin"), targetPath);
 		
 		if (targetFlags.exists ("gdrive")) {

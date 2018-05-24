@@ -384,8 +384,6 @@ class PathHelper {
 	
 	public static function mkdir (directory:String):Void {
 		
-		trace("PathHelper.mkdir(" + directory + ")");
-		
 		directory = StringTools.replace (directory, "\\", "/");
 		var total = "";
 		
@@ -437,8 +435,6 @@ class PathHelper {
 				if (!FileSystem.exists (total)) {
 					
 					LogHelper.info ("", " - \x1b[1mCreating directory:\x1b[0m " + total);
-					
-					trace("total = " + total);
 					
 					FileSystem.createDirectory (total);
 					
