@@ -212,6 +212,10 @@ class System {
 	
 	public static function getTimer ():Int {
 		
+		#if lime_console_timer
+		return lime.console.Timer.getTimer();
+		#end
+		
 		#if flash
 		return flash.Lib.getTimer ();
 		#elseif js
