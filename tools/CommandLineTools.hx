@@ -623,6 +623,8 @@ class CommandLineTools {
 			
 		}
 		
+		project.targetHandlers.set("switch", "lime-switch");
+		
 		if (project.targetHandlers.exists (Std.string (project.target))) {
 			
 			if (command == "build" || command == "test") {
