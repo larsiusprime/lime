@@ -911,14 +911,14 @@ abstract Matrix4(Float32Array) from Float32Array to Float32Array {
 	}
 	
 	
-	@:arrayAccess public function get (index:Int):Float {
+	@:arrayAccess public inline function get (index:Int):Float {
 		
 		return this[index];
 		
 	}
 	
 	
-	@:arrayAccess public function set (index:Int, value:Float):Float {
+	@:arrayAccess public inline function set (index:Int, value:Float):Float {
 		
 		this[index] = value;
 		return value;
