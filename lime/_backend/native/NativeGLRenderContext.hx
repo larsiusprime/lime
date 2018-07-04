@@ -1525,7 +1525,7 @@ class NativeGLRenderContext {
 	}
 	
 	
-	public function enableVertexAttribArray (index:Int):Void {
+	public inline function enableVertexAttribArray (index:Int):Void {
 		
 		#if (lime_cffi && lime_opengl && !macro)
 		NativeCFFI.lime_gl_enable_vertex_attrib_array (index);
