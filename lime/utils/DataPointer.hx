@@ -64,7 +64,7 @@ abstract DataPointer(DataPointerType) to DataPointerType {
 	}
 	
 	
-	@:from @:noCompletion public static function fromArrayBufferView (arrayBufferView:ArrayBufferView):DataPointer {
+	@:from @:noCompletion public static inline function fromArrayBufferView (arrayBufferView:ArrayBufferView):DataPointer {
 		
 		#if (lime_cffi && !js && !macro)
 		if (arrayBufferView == null) return cast 0;
