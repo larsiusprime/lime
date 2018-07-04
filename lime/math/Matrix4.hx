@@ -29,7 +29,7 @@ abstract Matrix4(Float32Array) from Float32Array to Float32Array {
 	}
 	
 	
-	public function append (lhs:Matrix4):Void {
+	public inline function append (lhs:Matrix4):Void {
 		
 		var m111:Float = this[0], m121:Float = this[4], m131:Float = this[8], m141:Float = this[12],
 			m112:Float = this[1], m122:Float = this[5], m132:Float = this[9], m142:Float = this[13],
@@ -484,7 +484,7 @@ abstract Matrix4(Float32Array) from Float32Array to Float32Array {
 	}
 	
 	
-	public function identity () {
+	public inline function identity () {
 		
 		this[0] = 1;
 		this[1] = 0;
