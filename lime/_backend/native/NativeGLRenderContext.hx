@@ -2476,26 +2476,26 @@ class NativeGLRenderContext {
 	
 	public function getTexParameter (target:Int, pname:Int):Dynamic {
 		
-		switch (pname) {
+		return switch (pname) {
 			
 			case GL.TEXTURE_MAX_LOD, GL.TEXTURE_MIN_LOD:
 				
-				return getTexParameterf (target, pname);
+				getTexParameterf (target, pname);
 			
 			case GL.TEXTURE_IMMUTABLE_FORMAT:
 				
-				return getTexParameterf (target, pname) != 0;
+				getTexParameterf (target, pname) != 0;
 			
 			default:
 				
-				return getTexParameteri (target, pname);
+				getTexParameteri (target, pname);
 			
 		}
 		
 	}
 	
 	
-	public function getTexParameterf (target:Int, pname:Int):Float {
+	public inline function getTexParameterf (target:Int, pname:Int):Float {
 		
 		#if (lime_cffi && lime_opengl && !macro)
 		return NativeCFFI.lime_gl_get_tex_parameterf (target, pname);
@@ -2506,7 +2506,7 @@ class NativeGLRenderContext {
 	}
 	
 	
-	public function getTexParameterfv (target:Int, pname:Int, params:DataPointer):Void {
+	public inline function getTexParameterfv (target:Int, pname:Int, params:DataPointer):Void {
 		
 		#if (lime_cffi && lime_opengl && !macro)
 		NativeCFFI.lime_gl_get_tex_parameterfv (target, pname, params);
@@ -2515,7 +2515,7 @@ class NativeGLRenderContext {
 	}
 	
 	
-	public function getTexParameteri (target:Int, pname:Int):Int {
+	public inline function getTexParameteri (target:Int, pname:Int):Int {
 		
 		#if (lime_cffi && lime_opengl && !macro)
 		return NativeCFFI.lime_gl_get_tex_parameteri (target, pname);
@@ -2526,7 +2526,7 @@ class NativeGLRenderContext {
 	}
 	
 	
-	public function getTexParameteriv (target:Int, pname:Int, params:DataPointer):Void {
+	public inline function getTexParameteriv (target:Int, pname:Int, params:DataPointer):Void {
 		
 		#if (lime_cffi && lime_opengl && !macro)
 		NativeCFFI.lime_gl_get_tex_parameteriv (target, pname, params);
@@ -3819,7 +3819,7 @@ class NativeGLRenderContext {
 	}
 	
 	
-	private function __getObjectID (object:GLObject):Int {
+	private inline function __getObjectID (object:GLObject):Int {
 		
 		return (object == null) ? 0 : object.id;
 		
