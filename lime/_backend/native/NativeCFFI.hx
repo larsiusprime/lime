@@ -178,6 +178,9 @@ class NativeCFFI {
 	@:cffi private static function lime_window_event_manager_register (callback:Dynamic, eventObject:Dynamic):Void;
 	@:cffi private static function lime_zlib_compress (data:Dynamic, bytes:Dynamic):Dynamic;
 	@:cffi private static function lime_zlib_decompress (data:Dynamic, bytes:Dynamic):Dynamic;
+	#if (LIME_SDL_SYSWM_EVENTS) 
+	@:cffi private static function lime_syswm_event_manager_register (callback:Dynamic, eventObject:Dynamic):Dynamic; 
+	#end
 	#end
 	
 	#if (lime_cffi && !macro && android)
