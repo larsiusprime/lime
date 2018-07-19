@@ -65,6 +65,10 @@ class NativeApplication {
 	private var unusedTouchesPool = new List<Touch> ();
 	private var windowEventInfo = new WindowEventInfo ();
 	
+	#if LIME_SDL_SYSWM_EVENTS
+	private var sysWMEventInfo = new SysWMEventInfo();
+	#end
+	
 	public var handle:Dynamic;
 	
 	private var frameRate:Float;
@@ -128,6 +132,9 @@ class NativeApplication {
 		NativeCFFI.lime_window_event_manager_register (handleWindowEvent, windowEventInfo);
 		#if (ios || android || tvos)
 		NativeCFFI.lime_sensor_event_manager_register (handleSensorEvent, sensorEventInfo);
+		#end
+		#if LIME_SDL_SYSWM_EVENTS
+		NativeCFFI.lime_syswm_event_manager_register (handleSysWMEvent, sysWMEventInfo);
 		#end
 		#end
 		
@@ -432,6 +439,15 @@ class NativeApplication {
 			
 		}
 		
+	}
+	
+	
+	private function handleSysWMEvent() {
+		
+		#if LIME_SDL_SYSWM_EVENTS
+		lime.system.SystemEvents.RawEvent(sysWMEventInfo.type);
+		#end
+	
 	}
 	
 	
@@ -1005,6 +1021,31 @@ private class MouseEventInfo {
 	var MOUSE_WHEEL = 3;
 	
 }
+
+
+#if LIME_SDL_SYSWM_EVENTS
+private class SysWMEventInfo {
+	
+	
+	public var type:Int;
+	
+	
+	public function new (type:Int = null) {
+		
+		this.type = type;
+		
+	}
+	
+	
+	public function clone ():SysWMEventInfo {
+		
+		return new SysWMEventInfo (type);
+		
+	}
+	
+	
+}
+#end
 
 
 private class RenderEventInfo {
