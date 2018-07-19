@@ -18,6 +18,9 @@
 #include <ui/WindowEvent.h>
 #include "SDLWindow.h"
 
+#if LIME_SDL_SYSWM_EVENTS
+extern void InterpretSysWMEvent (SDL_Event* event);
+#endif
 
 namespace lime {
 	
@@ -47,6 +50,7 @@ namespace lime {
 			void ProcessKeyEvent (SDL_Event* event);
 			void ProcessMouseEvent (SDL_Event* event);
 			void ProcessSensorEvent (SDL_Event* event);
+			void ProcessSysWMEvent (SDL_Event* event);
 			void ProcessTextEvent (SDL_Event* event);
 			void ProcessTouchEvent (SDL_Event* event);
 			void ProcessWindowEvent (SDL_Event* event);

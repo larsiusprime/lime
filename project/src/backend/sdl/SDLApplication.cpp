@@ -61,6 +61,9 @@ namespace lime {
 		WindowEvent windowEvent;
 		
 		SDL_EventState (SDL_DROPFILE, SDL_ENABLE);
+		#if LIME_SDL_SYSWM_EVENTS
+		SDL_EventState (SDL_SYSWMEVENT, SDL_ENABLE);
+		#endif
 		SDLJoystick::Init ();
 		
 		#ifdef HX_MACOS
@@ -174,6 +177,11 @@ namespace lime {
 			case SDL_DROPFILE:
 				
 				ProcessDropEvent (event);
+				break;
+			
+			case SDL_SYSWMEVENT:
+				
+				ProcessSysWMEvent (event);
 				break;
 			
 			case SDL_FINGERMOTION:
@@ -658,6 +666,15 @@ namespace lime {
 			SensorEvent::Dispatch (&sensorEvent);
 			
 		}
+		
+	}
+	
+	
+	void SDLApplication::ProcessSysWMEvent (SDL_Event* event) {
+		
+		#if LIME_SDL_SYSWM_EVENTS
+		InterpretSysWMEvent(event);
+		#endif
 		
 	}
 	
