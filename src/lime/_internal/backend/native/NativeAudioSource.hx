@@ -188,7 +188,14 @@ class NativeAudioSource {
 
 		if (stream) {
 
-			setCurrentTime (getCurrentTime ());
+			if (streamTimer != null) {
+				streamTimer.stop();
+			}
+
+			// not sure if this is correct. completed seems to always be false (???) although it gets set to true when the timer stops
+			//var time = completed ? 0 : getCurrentTime ();
+			var time = 0;
+			setCurrentTime (time);
 
 			streamTimer = new Timer (STREAM_TIMER_FREQUENCY);
 			streamTimer.run = streamTimer_onRun;
