@@ -44,6 +44,11 @@ class FlashAudioSource {
 	}
 
 
+	public function update() {
+		
+	}
+
+
 	public function play ():Void {
 
 		if (channel != null) channel.stop ();

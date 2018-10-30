@@ -14,9 +14,11 @@ import lime.math.Vector4;
 
 class AudioSource {
 
+	static var ID = 0;
 
 	public var onComplete = new Event<Void->Void> ();
 
+	public var id:Int = ID++;
 	public var buffer:AudioBuffer;
 	public var currentTime (get, set):Int;
 	public var gain (get, set):Float;
@@ -55,6 +57,7 @@ class AudioSource {
 	public function dispose ():Void {
 
 		__backend.dispose ();
+		AudioManager.removeAudioSource(this);
 
 	}
 
@@ -62,7 +65,13 @@ class AudioSource {
 	@:noCompletion private function init ():Void {
 
 		__backend.init ();
+		AudioManager.addAudioSource(this);
 
+
+	}
+
+	public function update() {
+		__backend.update();
 	}
 
 
@@ -172,5 +181,5 @@ class AudioSource {
 #elseif (js && html5)
 @:noCompletion private typedef AudioSourceBackend = lime._internal.backend.html5.HTML5AudioSource;
 #else
-@:noCompletion private typedef AudioSourceBackend = lime._internal.backend.native.NativeAudioSource;
+@:noCompletion private typedef AudioSourceBackend = lime._internal.backend.native.NativeAudioSource2;
 #end

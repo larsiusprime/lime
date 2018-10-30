@@ -44,6 +44,10 @@ class HTML5AudioSource {
 
 	}
 
+	public function update() {
+		
+	}
+
 
 	public function play ():Void {
 
