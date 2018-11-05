@@ -162,6 +162,9 @@ class NativeAudioSource2 {
 		if (!stillStreaming) {
 			stop();
 			audioSource.onComplete.dispatch();
+		} else if(playing && AL.getSourcei(handle, AL.SOURCE_STATE) == AL.STOPPED) {
+			// if we can't queue the buffers in time, the SOURCE_STATE will change to STOPPED
+			AL.sourcePlay(handle);
 		}
 	}
 
