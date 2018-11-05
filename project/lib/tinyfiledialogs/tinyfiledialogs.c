@@ -110,7 +110,7 @@ misrepresented as being the original software.
  #include <conio.h>
  /*#include <io.h>*/
  #define SLASH "\\"
- int tinyfd_winUtf8 = 1 ; /* on windows string char can be 0:MBSC or 1:UTF-8 */
+ int tinyfd_winUtf8 = 0 ; /* on windows string char can be 0:MBSC or 1:UTF-8 */
 #else
  #include <limits.h>
  #include <unistd.h>
@@ -2647,9 +2647,6 @@ char const * tinyfd_saveFileDialog (
 	char lString[MAX_PATH_OR_CMD] ;
 	char const * p ;
 	lBuff[0]='\0';
-	
-	printf("tinyfd_saveFileDialog2()\n");
-	
 #ifndef TINYFD_NOLIB
 	if ( ( !tinyfd_forceConsole || !( GetConsoleWindow() || dialogPresent() ) )
 	  && ( !getenv("SSH_CLIENT") || getenv("DISPLAY") ) )
@@ -2679,26 +2676,16 @@ char const * tinyfd_saveFileDialog (
 		p = tinyfd_inputBox(aTitle, "Save file","");
 	}
 
-	printf("p = %s\n",p);
-	
-	if(!p) printf("!p\n");
-	if (!strlen(p)) printf("!strlen(p)\n");
-	
 	if ( ! p || ! strlen ( p )  )
 	{
 		return NULL;
 	}
 	getPathWithoutFinalSlash ( lString , p ) ;
-	
-	printf("strlen(lString)=%d\n",strlen(lString));
-	//if(!dirExists(lString)) printf(!dirExists(lString));
-	
-	/*if ( strlen ( lString ) && ! dirExists ( lString ) )
+	if ( strlen ( lString ) && ! dirExists ( lString ) )
 	{
 		return NULL ;
-	}*/
+	}
 	getLastName(lString,p);
-	
 	if ( ! filenameValid(lString) )
 	{
 		return NULL;
@@ -2716,8 +2703,6 @@ char const * tinyfd_openFileDialog (
     char const * const aSingleFilterDescription , /* NULL or "image files" */
     int const aAllowMultipleSelects ) /* 0 or 1 */
 {
-	printf("tinyfd_openFileDialog2()\n");
-	
 	static char lBuff[MAX_MULTIPLE_FILES*MAX_PATH_OR_CMD];
 	char const * p ;
 #ifndef TINYFD_NOLIB
@@ -2752,12 +2737,6 @@ char const * tinyfd_openFileDialog (
 		p = tinyfd_inputBox(aTitle, "Open file","");
 	}
 
-	if(!p) printf("!p\n");
-	if(!strlen(p)) printf("!strlen(p)");
-	if(!fileExists(p)) printf("!fileExists(p)");
-	
-	printf("p = %s\n",p);
-	
 	if ( ! p || ! strlen ( p )  )
 	{
 		return NULL;
@@ -2766,14 +2745,11 @@ char const * tinyfd_openFileDialog (
 	{
 		p = ensureFilesExist( lBuff , p ) ;
 	}
-	/*else if ( ! fileExists (p) )
+	else if ( ! fileExists (p) )
 	{
 		return NULL ;
-	}*/
+	}
 	/* printf ( "lBuff3: %s\n" , p ) ; */
-	
-	printf("p = %s\n",p);
-	
 	return p ;
 }
 
@@ -2782,8 +2758,6 @@ char const * tinyfd_selectFolderDialog (
 	char const * const aTitle , /*  NULL or "" */
 	char const * const aDefaultPath ) /* NULL or "" */
 {
-	printf("tinyfd_selectFolderDialog2()\n");
-	
     static char lBuff [MAX_PATH_OR_CMD] ;
 	char const * p ;
 #ifndef TINYFD_NOLIB
@@ -2815,11 +2789,7 @@ char const * tinyfd_selectFolderDialog (
 		p = tinyfd_inputBox(aTitle, "Select folder","");
 	}
 	
-	if (!p) printf("!p\n");
-	if (!strlen(p)) printf("!strlen(p)\n");
-	if (!dirExists(p)) printf("!dirExists(p)\n");
-	
-	if ( ! p || ! strlen ( p ))// || ! dirExists ( p ) )
+	if ( ! p || ! strlen ( p ) || ! dirExists ( p ) )
 	{
 		return NULL ;
 	}
@@ -4696,7 +4666,6 @@ char const * tinyfd_saveFileDialog (
     char const * const * const aFilterPatterns , /* NULL or {"*.jpg","*.png"} */
     char const * const aSingleFilterDescription ) /* NULL or "image files" */
 {
-	printf("tinyfd_saveFileDialog() 1\n");
 
 	static char lBuff [MAX_PATH_OR_CMD] ;
 	char lDialogString [MAX_PATH_OR_CMD] ;
@@ -5020,8 +4989,6 @@ char const * tinyfd_openFileDialog (
     char const * const aSingleFilterDescription , /* NULL or "image files" */
     int const aAllowMultipleSelects ) /* 0 or 1 */
 {
-	printf("tinyfd_openFileDialog1()\n");
-	
 	static char lBuff [MAX_MULTIPLE_FILES*MAX_PATH_OR_CMD] ;
 	char lDialogString [MAX_PATH_OR_CMD] ;
 	char lString [MAX_PATH_OR_CMD] ;
@@ -5396,8 +5363,6 @@ char const * tinyfd_selectFolderDialog (
 	char const * const aTitle , /* "" */
 	char const * const aDefaultPath ) /* "" */
 {
-	printf("tinyfd_selectFolderDialog()\n");
-	
 	static char lBuff [MAX_PATH_OR_CMD] ;
 	char lDialogString [MAX_PATH_OR_CMD] ;
 	FILE * lIn ;
