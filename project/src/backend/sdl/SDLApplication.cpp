@@ -25,6 +25,12 @@ namespace lime {
 
 	SDLApplication::SDLApplication () {
 
+		// Set limits
+		struct rlimit limit;
+		limit.rlim_cur = 4096;
+		limit.rlim_max = 4096;
+		setrlimit(RLIMIT_NOFILE, &limit);
+
 		if (SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER | SDL_INIT_TIMER | SDL_INIT_JOYSTICK) != 0) {
 
 			printf ("Could not initialize SDL: %s.\n", SDL_GetError ());
