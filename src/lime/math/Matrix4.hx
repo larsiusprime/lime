@@ -1026,14 +1026,14 @@ abstract Matrix4(Float32Array) from Float32Array to Float32Array {
 	}
 
 
-	@:dox(hide) @:noCompletion @:arrayAccess public function get (index:Int):Float {
+	@:dox(hide) @:noCompletion @:arrayAccess public inline function get (index:Int):Float {
 
 		return this[index];
 
 	}
 
 
-	@:dox(hide) @:noCompletion @:arrayAccess public function set (index:Int, value:Float):Float {
+	@:dox(hide) @:noCompletion @:arrayAccess public inline function set (index:Int, value:Float):Float {
 
 		this[index] = value;
 		return value;
