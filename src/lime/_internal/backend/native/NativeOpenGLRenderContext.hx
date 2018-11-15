@@ -26,6 +26,10 @@ import lime.utils.Float32Array;
 import lime.utils.Int32Array;
 import lime.utils.UInt32Array;
 
+#if cpp
+import cpp.Pointer;
+#end
+
 
 #if !lime_debug
 @:fileXml('tags="haxe,release"')
@@ -809,7 +813,14 @@ class NativeOpenGLRenderContext {
 	public function bindBufferRange (target:Int, index:Int, buffer:GLBuffer, offset:DataPointer, size:Int):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
-		NativeCFFI.lime_gl_bind_buffer_range (target, index, __getObjectID (buffer), offset, size);
+		var objectID = __getObjectID (buffer);
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glBindBufferRange (target, index, objectID, {0}, size);', offset.ptr);
+		gcon();
+		#else
+		NativeCFFI.lime_gl_bind_buffer_range (target, index, objectID, offset, size);
+		#end
 		#end
 
 	}
@@ -933,7 +944,13 @@ class NativeOpenGLRenderContext {
 	public function bufferData (target:Int, size:Int, srcData:DataPointer, usage:Int):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glBufferData (target, size, {0}, usage);', srcData.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_buffer_data (target, size, srcData, usage);
+		#end
 		#end
 
 	}
@@ -942,7 +959,13 @@ class NativeOpenGLRenderContext {
 	public function bufferSubData (target:Int, dstByteOffset:Int, size:Int, srcData:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glBufferSubData (target, dstByteOffset, size, {0});', srcData.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_buffer_sub_data (target, dstByteOffset, size, srcData);
+		#end
 		#end
 
 	}
@@ -980,7 +1003,13 @@ class NativeOpenGLRenderContext {
 	public function clearBufferfv (buffer:Int, drawbuffer:Int, value:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glClearBufferfv (buffer, drawbuffer, {0});', value.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_clear_bufferfv (buffer, drawbuffer, value);
+		#end
 		#end
 
 	}
@@ -989,7 +1018,13 @@ class NativeOpenGLRenderContext {
 	public function clearBufferiv (buffer:Int, drawbuffer:Int, value:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glClearBufferiv (buffer, drawbuffer, {0});', value.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_clear_bufferiv (buffer, drawbuffer, value);
+		#end
 		#end
 
 	}
@@ -998,7 +1033,13 @@ class NativeOpenGLRenderContext {
 	public function clearBufferuiv (buffer:Int, drawbuffer:Int, value:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glClearBufferuiv (buffer, drawbuffer, {0});', value.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_clear_bufferuiv (buffer, drawbuffer, value);
+		#end
 		#end
 
 	}
@@ -1063,7 +1104,13 @@ class NativeOpenGLRenderContext {
 	public function compressedTexImage2D (target:Int, level:Int, internalformat:Int, width:Int, height:Int, border:Int, imageSize:Int, data:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__   ('glCompressedTexImage2D (target, level, internalformat, width, height, border, imageSize, {0});', data.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_compressed_tex_image_2d (target, level, internalformat, width, height, border, imageSize, data);
+		#end
 		#end
 
 	}
@@ -1072,7 +1119,13 @@ class NativeOpenGLRenderContext {
 	public function compressedTexImage3D (target:Int, level:Int, internalformat:Int, width:Int, height:Int, depth:Int, border:Int, imageSize:Int, data:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__   ('glCompressedTexImage3D (target, level, internalformat, width, height, depth, border, imageSize, {0});', data.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_compressed_tex_image_3d (target, level, internalformat, width, height, depth, border, imageSize, data);
+		#end
 		#end
 
 	}
@@ -1081,7 +1134,13 @@ class NativeOpenGLRenderContext {
 	public function compressedTexSubImage2D (target:Int, level:Int, xoffset:Int, yoffset:Int, width:Int, height:Int, format:Int, imageSize:Int, data:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__    ('glCompressedTexSubImage2D (target, level, xoffset, yoffset, width, height, format, imageSize, {0});', data.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_compressed_tex_sub_image_2d (target, level, xoffset, yoffset, width, height, format, imageSize, data);
+		#end
 		#end
 
 	}
@@ -1090,7 +1149,13 @@ class NativeOpenGLRenderContext {
 	public function compressedTexSubImage3D (target:Int, level:Int, xoffset:Int, yoffset:Int, zoffset:Int, width:Int, height:Int, depth:Int, format:Int, imageSize:Int, data:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__    ('glCompressedTexSubImage3D (target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, {0});', data.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_compressed_tex_sub_image_3d (target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, data);
+		#end
 		#end
 
 	}
@@ -1099,7 +1164,13 @@ class NativeOpenGLRenderContext {
 	public function copyBufferSubData (readTarget:Int, writeTarget:Int, readOffset:DataPointer, writeOffset:DataPointer, size:Int):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__   ('glCopyBufferSubData (readTarget, writeTarget, {0}, {1}, size);', readOffset.ptr, writeOffset.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_copy_buffer_sub_data (readTarget, writeTarget, readOffset, writeOffset, size);
+		#end
 		#end
 
 	}
@@ -1495,7 +1566,13 @@ class NativeOpenGLRenderContext {
 	public function drawElements (mode:Int, count:Int, type:Int, offset:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glDrawElements (mode, count, type, {0});', offset.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_draw_elements (mode, count, type, offset);
+		#end
 		#end
 
 	}
@@ -1504,7 +1581,13 @@ class NativeOpenGLRenderContext {
 	public function drawElementsInstanced (mode:Int, count:Int, type:Int, offset:DataPointer, instanceCount:Int):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glDrawElementsInstanced (mode, count, type, {0}, instanceCount);', offset.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_draw_elements_instanced (mode, count, type, offset, instanceCount);
+		#end
 		#end
 
 	}
@@ -1513,7 +1596,13 @@ class NativeOpenGLRenderContext {
 	public function drawRangeElements (mode:Int, start:Int, end:Int, count:Int, type:Int, offset:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glDrawRangeElements (mode, start, end, count, type, {0});', offset.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_draw_range_elements (mode, start, end, count, type, offset);
+		#end
 		#end
 
 	}
@@ -1675,7 +1764,14 @@ class NativeOpenGLRenderContext {
 	public function getActiveUniformBlockiv (program:GLProgram, uniformBlockIndex:Int, pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
-		NativeCFFI.lime_gl_get_active_uniform_blockiv (__getObjectID (program), uniformBlockIndex, pname, params);
+		var objectID = __getObjectID (program);
+		#if cpp
+		gcoff();
+		untyped __cpp__   ('glGetActiveUniformBlockiv (objectID, uniformBlockIndex, pname, {0});', params.ptr);
+		gcon();
+		#else
+		NativeCFFI.lime_gl_get_active_uniform_blockiv (objectID, uniformBlockIndex, pname, params);
+		#end
 		#end
 
 	}
@@ -1717,12 +1813,20 @@ class NativeOpenGLRenderContext {
 	public function getActiveUniformsiv (program:GLProgram, uniformIndices:Array<Int>, pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		var programID = __getObjectID (program);
 		#if hl
 		var _uniformIndices = new hl.NativeArray<Int> (uniformIndices.length);
 		for (i in 0...uniformIndices.length) _uniformIndices[i] = uniformIndices[i];
 		var uniformIndices = _uniformIndices;
+		#elseif cpp
+		var _uniformIndices = new cpp.NativeArray<Int> (uniformIndices.length);
+		for (i in 0...uniformIndices.length) _uniformIndices[i] = uniformIndices[i];
+		gcoff();
+		untyped __cpp__  ('glGetActiveUniformsiv (programID, {0}, pname, {1});', _uniformIndices, params.ptr);
+		gcon();
+		#else
+		NativeCFFI.lime_gl_get_active_uniformsiv (programID,  uniformIndices, pname, params);
 		#end
-		NativeCFFI.lime_gl_get_active_uniformsiv (__getObjectID (program), uniformIndices, pname, params);
 		#end
 
 	}
@@ -1772,7 +1876,13 @@ class NativeOpenGLRenderContext {
 	public function getBooleanv (pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glGetBooleanv (pname, {0});', params.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_get_booleanv (pname, params);
+		#end
 		#end
 
 	}
@@ -1799,7 +1909,13 @@ class NativeOpenGLRenderContext {
 	public function getBufferParameteri64v (target:Int, pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glGetBufferParameteri64v (target, pname, {0});', params.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_get_buffer_parameteri64v (target, pname, params);
+		#end
 		#end
 
 	}
@@ -1808,7 +1924,13 @@ class NativeOpenGLRenderContext {
 	public function getBufferParameteriv (target:Int, pname:Int, data:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glGetBufferParameteriv (target, pname, {0});', data.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_get_buffer_parameteriv (target, pname, data);
+		#end
 		#end
 
 	}
@@ -1817,7 +1939,16 @@ class NativeOpenGLRenderContext {
 	public function getBufferPointerv (target:Int, pname:Int):DataPointer {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		var pointer = new cpp.Pointer<Bytes>();
+		var ptr = pointer.ptr;
+		gcoff();
+		untyped __cpp__   ('ptr = glGetBufferPointerv (target, pname);');
+		gcon();
+		return pointer;
+		#else
 		return NativeCFFI.lime_gl_get_buffer_pointerv (target, pname);
+		#end
 		#else
 		return 0;
 		#end
@@ -1828,7 +1959,13 @@ class NativeOpenGLRenderContext {
 	public function getBufferSubData (target:Int, offset:DataPointer, size:Int, data:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__   ('glGetBufferSubData (target, offset, size, {0});', data.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_get_buffer_sub_data (target, offset, size, data);
+		#end
 		#end
 
 	}
@@ -1923,7 +2060,13 @@ class NativeOpenGLRenderContext {
 	public function getFloatv (pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glGetFloatv (pname, {0});', params.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_get_floatv (pname, params);
+		#end
 		#end
 
 	}
@@ -1973,7 +2116,13 @@ class NativeOpenGLRenderContext {
 	public function getFramebufferAttachmentParameteriv (target:Int, attachment:Int, pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__   ('glGetFramebufferAttachmentParameteriv (target, attachment, pname, {0});', params.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_get_framebuffer_attachment_parameteriv (target, attachment, pname, params);
+		#end
 		#end
 
 	}
@@ -2028,7 +2177,13 @@ class NativeOpenGLRenderContext {
 	public function getInteger64i_v (pname:Int, index:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glGetInteger64i_v (pname, index, {0});', params.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_get_integer64i_v (pname, index, params);
+		#end
 		#end
 
 	}
@@ -2037,7 +2192,13 @@ class NativeOpenGLRenderContext {
 	public function getInteger64v (pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glGetInteger64v (pname, {0});', params.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_get_integer64v (pname, params);
+		#end
 		#end
 
 	}
@@ -2046,7 +2207,13 @@ class NativeOpenGLRenderContext {
 	public function getIntegeri_v (pname:Int, index:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glGetIntegeri_v (pname, index, {0});', params.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_get_integeri_v (pname, index, params);
+		#end
 		#end
 
 	}
@@ -2055,7 +2222,13 @@ class NativeOpenGLRenderContext {
 	public function getIntegerv (pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glGetIntegerv (pname, {0});', params.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_get_integerv (pname, params);
+		#end
 		#end
 
 	}
@@ -2077,7 +2250,13 @@ class NativeOpenGLRenderContext {
 	public function getInternalformativ (target:Int, internalformat:Int, pname:Int, bufSize:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glGetInternalformativ (target, internalformat, pname, bufSize, {0});', params.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_get_internalformativ (target, internalformat, pname, bufSize, params);
+		#end
 		#end
 
 	}
@@ -2194,7 +2373,14 @@ class NativeOpenGLRenderContext {
 	public function getProgramiv (program:GLProgram, pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
-		NativeCFFI.lime_gl_get_programiv (__getObjectID (program), pname, params);
+		var programID = __getObjectID (program);
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glGetProgramiv (programID, pname, {0});', params.ptr);
+		gcon();
+		#else
+		NativeCFFI.lime_gl_get_programiv (programID, pname, params);
+		#end
 		#end
 
 	}
@@ -2256,7 +2442,13 @@ class NativeOpenGLRenderContext {
 	public function getQueryiv (target:Int, pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glGetQueryiv (target, pname, {0});', params.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_get_queryiv (target, pname, params);
+		#end
 		#end
 
 	}
@@ -2276,7 +2468,14 @@ class NativeOpenGLRenderContext {
 	public function getQueryObjectuiv (query:GLQuery, pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
-		NativeCFFI.lime_gl_get_query_objectuiv (__getObjectID (query), pname, params);
+		var queryID = __getObjectID (query);
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glGetQueryObjectuiv (queryID, pname, {0});', params.ptr);
+		gcon();
+		#else
+		NativeCFFI.lime_gl_get_query_objectuiv (queryID, pname, params);
+		#end
 		#end
 
 	}
@@ -2312,7 +2511,13 @@ class NativeOpenGLRenderContext {
 	public function getRenderbufferParameteriv (target:Int, pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glGetRenderBufferParameteriv (target, pname, {0});', params.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_get_renderbuffer_parameteriv (target, pname, params);
+		#end
 		#end
 
 	}
@@ -2341,7 +2546,14 @@ class NativeOpenGLRenderContext {
 	public function getSamplerParameterfv (sampler:GLSampler, pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
-		NativeCFFI.lime_gl_get_sampler_parameterfv (__getObjectID (sampler), pname, params);
+		var samplerID = __getObjectID (sampler);
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glGetSamplerParameterfv (samplerID, pname, {0});', params.ptr);
+		gcon();
+		#else
+		NativeCFFI.lime_gl_get_sampler_parameterfv (samplerID, pname, params);
+		#end
 		#end
 
 	}
@@ -2361,7 +2573,14 @@ class NativeOpenGLRenderContext {
 	public function getSamplerParameteriv (sampler:GLSampler, pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
-		NativeCFFI.lime_gl_get_sampler_parameteriv (__getObjectID (sampler), pname, params);
+		var samplerID = __getObjectID (sampler);
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glGetSamplerParameteriv (samplerID, pname, {0});', params.ptr);
+		gcon();
+		#else
+		NativeCFFI.lime_gl_get_sampler_parameteriv (samplerID, pname, params);
+		#end
 		#end
 
 	}
@@ -2381,7 +2600,14 @@ class NativeOpenGLRenderContext {
 	public function getShaderiv (shader:GLShader, pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
-		NativeCFFI.lime_gl_get_shaderiv (__getObjectID (shader), pname, params);
+		var shaderID = __getObjectID (shader);
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glGetShaderiv (shaderID, pname, {0});', params.ptr);
+		gcon();
+		#else
+		NativeCFFI.lime_gl_get_shaderiv (shaderID, pname, params);
+		#end
 		#end
 
 	}
@@ -2565,7 +2791,13 @@ class NativeOpenGLRenderContext {
 	public function getTexParameterfv (target:Int, pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glGetTexParameterfv (target, pname, {0});', params.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_get_tex_parameterfv (target, pname, params);
+		#end
 		#end
 
 	}
@@ -2585,7 +2817,13 @@ class NativeOpenGLRenderContext {
 	public function getTexParameteriv (target:Int, pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glGetTexParameteriv (target, pname, {0});', params.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_get_tex_parameteriv (target, pname, params);
+		#end
 		#end
 
 	}
@@ -2707,7 +2945,14 @@ class NativeOpenGLRenderContext {
 	public function getUniformfv (program:GLProgram, location:GLUniformLocation, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
-		NativeCFFI.lime_gl_get_uniformfv (__getObjectID (program), location, params);
+		var programID = __getObjectID (program);
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glGetUniformfv (programID, location, {0});', params.ptr);
+		gcon();
+		#else
+		NativeCFFI.lime_gl_get_uniformfv (programID, location, params);
+		#end
 		#end
 
 	}
@@ -2727,7 +2972,14 @@ class NativeOpenGLRenderContext {
 	public function getUniformiv (program:GLProgram, location:GLUniformLocation, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
-		NativeCFFI.lime_gl_get_uniformiv (__getObjectID (program), location, params);
+		var programID = __getObjectID (program);
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glGetUniformiv (programID, location, {0});', params.ptr);
+		gcon();
+		#else
+		NativeCFFI.lime_gl_get_uniformiv (programID, location, params);
+		#end
 		#end
 
 	}
@@ -2747,7 +2999,14 @@ class NativeOpenGLRenderContext {
 	public function getUniformuiv (program:GLProgram, location:GLUniformLocation, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
-		NativeCFFI.lime_gl_get_uniformuiv (__getObjectID (program), location, params);
+		var programID = __getObjectID (program);
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glGetUniformuiv (programID, location, {0});', params.ptr);
+		gcon();
+		#else
+		NativeCFFI.lime_gl_get_uniformuiv (programID, location, params);
+		#end
 		#end
 
 	}
@@ -2805,7 +3064,13 @@ class NativeOpenGLRenderContext {
 	public function getVertexAttribfv (index:Int, pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glGetVertexAttribfv (index, pname, {0});', params.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_get_vertex_attribfv (index, pname, params);
+		#end
 		#end
 
 	}
@@ -2836,7 +3101,13 @@ class NativeOpenGLRenderContext {
 	public function getVertexAttribIiv (index:Int, pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glGetVertexAttribIiv (index, pname, {0});', params.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_get_vertex_attribiiv (index, pname, params);
+		#end
 		#end
 
 	}
@@ -2856,7 +3127,13 @@ class NativeOpenGLRenderContext {
 	public function getVertexAttribIuiv (index:Int, pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glGetVertexAttribIuiv (index, pname, {0});', params.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_get_vertex_attribiuiv (index, pname, params);
+		#end
 		#end
 
 	}
@@ -2865,7 +3142,13 @@ class NativeOpenGLRenderContext {
 	public function getVertexAttribiv (index:Int, pname:Int, params:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glGetVertexAttribiv (index, pname, {0});', params.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_get_vertex_attribiv (index, pname, params);
+		#end
 		#end
 
 	}
@@ -2874,7 +3157,16 @@ class NativeOpenGLRenderContext {
 	public function getVertexAttribPointerv (index:Int, pname:Int):DataPointer {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		var pointer = new cpp.Pointer<Bytes>();
+		var ptr = pointer.ptr;
+		gcoff();
+		untyped __cpp__    ('ptr = glGetVertexAttribPointerv (index, pname);');
+		gcon();
+		return pointer;
+		#else
 		return NativeCFFI.lime_gl_get_vertex_attrib_pointerv (index, pname);
+		#end
 		#else
 		return 0;
 		#end
@@ -3079,7 +3371,16 @@ class NativeOpenGLRenderContext {
 	public function mapBufferRange (target:Int, offset:DataPointer, length:Int, access:Int):DataPointer {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		var pointer = new cpp.Pointer<Bytes>();
+		var ptr = pointer.ptr;
+		gcoff();
+		untyped __cpp__   ('ptr = glMapBufferRange (target, {0}, length, access);', offset.ptr);
+		gcon();
+		return pointer;
+		#else
 		return NativeCFFI.lime_gl_map_buffer_range (target, offset, length, access);
+		#end
 		#else
 		return 0;
 		#end
@@ -3117,7 +3418,14 @@ class NativeOpenGLRenderContext {
 	public function programBinary (program:GLProgram, binaryFormat:Int, binary:DataPointer, length:Int):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
-		NativeCFFI.lime_gl_program_binary (__getObjectID (program), binaryFormat, binary, length);
+		var programID = __getObjectID (program);
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glProgramBinary (programID, binaryFormat, {0}, length);', binary.ptr);
+		gcon();
+		#else
+		NativeCFFI.lime_gl_program_binary (programID, binaryFormat, binary, length);
+		#end
 		#end
 
 	}
@@ -3144,7 +3452,13 @@ class NativeOpenGLRenderContext {
 	public function readPixels (x:Int, y:Int, width:Int, height:Int, format:Int, type:Int, pixels:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glReadPixels (x, y, width, height, format, type, {0});', pixels.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_read_pixels (x, y, width, height, format, type, pixels);
+		#end
 		#end
 
 	}
@@ -3230,7 +3544,13 @@ class NativeOpenGLRenderContext {
 		for (i in 0...shaders.length) _shaders[i] = shaders[i].id;
 		var shaders = _shaders;
 		#end
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glShaderBinary (shaders, binaryformat, {0}, length);', binary.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_shader_binary (shaders, binaryformat, binary, length);
+		#end
 		#end
 
 	}
@@ -3302,7 +3622,13 @@ class NativeOpenGLRenderContext {
 	public function texImage2D (target:Int, level:Int, internalformat:Int, width:Int, height:Int, border:Int, format:Int, type:Int, data:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glTexImage2D (target, level, internalformat, width, height, border, format, type, {0});', data.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_tex_image_2d (target, level, internalformat, width, height, border, format, type, data);
+		#end
 		#end
 
 	}
@@ -3311,7 +3637,13 @@ class NativeOpenGLRenderContext {
 	public function texImage3D (target:Int, level:Int, internalformat:Int, width:Int, height:Int, depth:Int, border:Int, format:Int, type:Int, data:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glTexImage3D (target, level, internalformat, width, height, depth, border, format, type, {0});', data.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_tex_image_3d (target, level, internalformat, width, height, depth, border, format, type, data);
+		#end
 		#end
 
 	}
@@ -3356,7 +3688,13 @@ class NativeOpenGLRenderContext {
 	public function texSubImage2D (target:Int, level:Int, xoffset:Int, yoffset:Int, width:Int, height:Int, format:Int, type:Int, pixels:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__   ('glTexSubImage2D (target, level, xoffset, yoffset, width, height, format, type, {0});', pixels.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_tex_sub_image_2d (target, level, xoffset, yoffset, width, height, format, type, pixels);
+		#end
 		#end
 
 	}
@@ -3365,7 +3703,13 @@ class NativeOpenGLRenderContext {
 	public function texSubImage3D (target:Int, level:Int, xoffset:Int, yoffset:Int, zoffset:Int, width:Int, height:Int, depth:Int, format:Int, type:Int, data:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__   ('glTexSubImage3D (target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, {0});', data.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_tex_sub_image_3d (target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, data);
+		#end
 		#end
 
 	}
@@ -3404,7 +3748,13 @@ class NativeOpenGLRenderContext {
 	public function uniform1fv (location:GLUniformLocation, count:Int, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__('glUniform1fv (location, count, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform1fv (location, count, v);
+		#end
 		#end
 
 	}
@@ -3422,7 +3772,13 @@ class NativeOpenGLRenderContext {
 	public function uniform1iv (location:GLUniformLocation, count:Int, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__('glUniform1iv (location, count, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform1iv (location, count, v);
+		#end
 		#end
 
 	}
@@ -3440,7 +3796,13 @@ class NativeOpenGLRenderContext {
 	public function uniform1uiv (location:GLUniformLocation, count:Int, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__('glUniform1uiv (location, count, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform1uiv (location, count, v);
+		#end
 		#end
 
 	}
@@ -3458,7 +3820,13 @@ class NativeOpenGLRenderContext {
 	public function uniform2fv (location:GLUniformLocation, count:Int, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__('glUniform2fv (location, count, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform2fv (location, count, v);
+		#end
 		#end
 
 	}
@@ -3476,7 +3844,13 @@ class NativeOpenGLRenderContext {
 	public function uniform2iv (location:GLUniformLocation, count:Int, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__('glUniform2iv (location, count, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform2iv (location, count, v);
+		#end
 		#end
 
 	}
@@ -3494,7 +3868,13 @@ class NativeOpenGLRenderContext {
 	public function uniform2uiv (location:GLUniformLocation, count:Int, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__('glUniform2uiv (location, count, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform2uiv (location, count, v);
+		#end
 		#end
 
 	}
@@ -3512,7 +3892,13 @@ class NativeOpenGLRenderContext {
 	public function uniform3fv (location:GLUniformLocation, count:Int, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__('glUniform3fv (location, count, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform3fv (location, count, v);
+		#end
 		#end
 
 	}
@@ -3530,7 +3916,13 @@ class NativeOpenGLRenderContext {
 	public function uniform3iv (location:GLUniformLocation, count:Int, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__('glUniform3iv (location, count, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform3iv (location, count, v);
+		#end
 		#end
 
 	}
@@ -3548,7 +3940,13 @@ class NativeOpenGLRenderContext {
 	public function uniform3uiv (location:GLUniformLocation, count:Int, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__('glUniform3uiv (location, count, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform3uiv (location, count, v);
+		#end
 		#end
 
 	}
@@ -3566,7 +3964,13 @@ class NativeOpenGLRenderContext {
 	public function uniform4fv (location:GLUniformLocation, count:Int, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__('glUniform4fv (location, count, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform4fv (location, count, v);
+		#end
 		#end
 
 	}
@@ -3584,7 +3988,13 @@ class NativeOpenGLRenderContext {
 	public function uniform4iv (location:GLUniformLocation, count:Int, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__('glUniform4iv (location, count, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform4iv (location, count, v);
+		#end
 		#end
 
 	}
@@ -3602,7 +4012,13 @@ class NativeOpenGLRenderContext {
 	public function uniform4uiv (location:GLUniformLocation, count:Int, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__('glUniform4uiv (location, count, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform4uiv (location, count, v);
+		#end
 		#end
 
 	}
@@ -3620,7 +4036,13 @@ class NativeOpenGLRenderContext {
 	public function uniformMatrix2fv (location:GLUniformLocation, count:Int, transpose:Bool, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glUniformMatrix2fv (location, count, transpose, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform_matrix2fv (location, count, transpose, v);
+		#end
 		#end
 
 	}
@@ -3629,7 +4051,13 @@ class NativeOpenGLRenderContext {
 	public function uniformMatrix2x3fv (location:GLUniformLocation, count:Int, transpose:Bool, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glUniformMatrix2x3fv (location, count, transpose, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform_matrix2x3fv (location, count, transpose, v);
+		#end
 		#end
 
 	}
@@ -3638,7 +4066,13 @@ class NativeOpenGLRenderContext {
 	public function uniformMatrix2x4fv (location:GLUniformLocation, count:Int, transpose:Bool, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glUniformMatrix2x4fv (location, count, transpose, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform_matrix2x4fv (location, count, transpose, v);
+		#end
 		#end
 
 	}
@@ -3647,7 +4081,13 @@ class NativeOpenGLRenderContext {
 	public function uniformMatrix3fv (location:GLUniformLocation, count:Int, transpose:Bool, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glUniformMatrix3fv (location, count, transpose, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform_matrix3fv (location, count, transpose, v);
+		#end
 		#end
 
 	}
@@ -3656,7 +4096,13 @@ class NativeOpenGLRenderContext {
 	public function uniformMatrix3x2fv (location:GLUniformLocation, count:Int, transpose:Bool, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glUniformMatrix3x2fv (location, count, transpose, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform_matrix3x2fv (location, count, transpose, v);
+		#end
 		#end
 
 	}
@@ -3665,7 +4111,13 @@ class NativeOpenGLRenderContext {
 	public function uniformMatrix3x4fv (location:GLUniformLocation, count:Int, transpose:Bool, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glUniformMatrix3x4fv (location, count, transpose, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform_matrix3x4fv (location, count, transpose, v);
+		#end
 		#end
 
 	}
@@ -3674,7 +4126,13 @@ class NativeOpenGLRenderContext {
 	public function uniformMatrix4fv (location:GLUniformLocation, count:Int, transpose:Bool, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glUniformMatrix4fv (location, count, transpose, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform_matrix4fv (location, count, transpose, v);
+		#end
 		#end
 
 	}
@@ -3683,7 +4141,13 @@ class NativeOpenGLRenderContext {
 	public function uniformMatrix4x2fv (location:GLUniformLocation, count:Int, transpose:Bool, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glUniformMatrix4x2fv (location, count, transpose, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform_matrix4x2fv (location, count, transpose, v);
+		#end
 		#end
 
 	}
@@ -3692,7 +4156,13 @@ class NativeOpenGLRenderContext {
 	public function uniformMatrix4x3fv (location:GLUniformLocation, count:Int, transpose:Bool, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glUniformMatrix4x3fv (location, count, transpose, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_uniform_matrix4x3fv (location, count, transpose, v);
+		#end
 		#end
 
 	}
@@ -3741,7 +4211,13 @@ class NativeOpenGLRenderContext {
 	public function vertexAttrib1fv (index:Int, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glVertexAttrib1fv (index, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_vertex_attrib1fv (index, v);
+		#end
 		#end
 
 	}
@@ -3759,7 +4235,13 @@ class NativeOpenGLRenderContext {
 	public function vertexAttrib2fv (index:Int, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glVertexAttrib2fv (index, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_vertex_attrib2fv (index, v);
+		#end
 		#end
 
 	}
@@ -3777,7 +4259,13 @@ class NativeOpenGLRenderContext {
 	public function vertexAttrib3fv (index:Int, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glVertexAttrib3fv (index, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_vertex_attrib3fv (index, v);
+		#end
 		#end
 
 	}
@@ -3795,7 +4283,13 @@ class NativeOpenGLRenderContext {
 	public function vertexAttrib4fv (index:Int, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glVertexAttrib4fv (index, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_vertex_attrib4fv (index, v);
+		#end
 		#end
 
 	}
@@ -3824,7 +4318,13 @@ class NativeOpenGLRenderContext {
 	public function vertexAttribI4iv (index:Int, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glVertexAttribi4iv (index, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_vertex_attribi4iv (index, v);
+		#end
 		#end
 
 	}
@@ -3844,7 +4344,13 @@ class NativeOpenGLRenderContext {
 	public function vertexAttribI4uiv (index:Int, v:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__ ('glVertexAttribi4uiv (index, {0});', v.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_vertex_attribi4uiv (index, v);
+		#end
 		#end
 
 	}
@@ -3853,7 +4359,13 @@ class NativeOpenGLRenderContext {
 	public function vertexAttribIPointer (index:Int, size:Int, type:Int, stride:Int, offset:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glVertexAttribIPointer (index, size, type, stride, {0});', offset.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_vertex_attrib_ipointer (index, size, type, stride, offset);
+		#end
 		#end
 
 	}
@@ -3862,7 +4374,13 @@ class NativeOpenGLRenderContext {
 	public function vertexAttribPointer (index:Int, size:Int, type:Int, normalized:Bool, stride:Int, offset:DataPointer):Void {
 
 		#if (lime_cffi && (lime_opengl || lime_opengles) && !macro)
+		#if cpp
+		gcoff();
+		untyped __cpp__  ('glVertexAttribPointer (index, size, type, normalized, stride, {0});', offset.ptr);
+		gcon();
+		#else
 		NativeCFFI.lime_gl_vertex_attrib_pointer (index, size, type, normalized, stride, offset);
+		#end
 		#end
 
 	}
@@ -3899,6 +4417,11 @@ class NativeOpenGLRenderContext {
 
 	}
 
+	
+	#if cpp
+	private inline function gcoff():Void { cpp.vm.Gc.enterGCFreeZone(); }
+	private inline function gcon ():Void { cpp.vm.Gc.exitGCFreeZone(); }
+	#end
 
 	#if (!js || !html5 || doc_gen)
 	private function __createObject (id:Int):GLObject {

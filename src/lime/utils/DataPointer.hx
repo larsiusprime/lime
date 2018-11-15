@@ -6,6 +6,10 @@ import haxe.io.Bytes;
 import lime.system.CFFIPointer;
 import lime.utils.Bytes as LimeBytes;
 
+#if cpp
+import cpp.Pointer;
+#end
+
 #if (lime_cffi && !macro)
 import lime._internal.backend.native.NativeCFFI;
 @:access(lime._internal.backend.native.NativeCFFI)
@@ -25,8 +29,16 @@ abstract DataPointer(DataPointerType) to DataPointerType {
 	@:from @:noCompletion private static function fromInt (value:Int):DataPointer {
 
 		#if (lime_cffi && !macro)
+		#if cpp
+		
+		untyped __cpp__ ('void * ptr = value;');
+		var pointer = Pointer.fromPointer<Bytes>( untyped __cpp__('ptr;') );
+		return pointer;
+		
+		#else
 		var float:Float = value;
 		return new DataPointer (float);
+		#end
 		#elseif (js && !doc_gen)
 		return new DataPointer (new DataPointerObject (value));
 		#else
@@ -36,6 +48,7 @@ abstract DataPointer(DataPointerType) to DataPointerType {
 	}
 
 
+	#if !cpp
 	@:from @:noCompletion private static function fromFloat (value:Float):DataPointer {
 
 		#if (lime_cffi && !macro)
@@ -47,13 +60,18 @@ abstract DataPointer(DataPointerType) to DataPointerType {
 		#end
 
 	}
+	#end
 
 
 	@:from @:noCompletion public static function fromBytesPointer (pointer:BytePointer):DataPointer {
 
 		#if (lime_cffi && !macro)
 		if (pointer == null || pointer.bytes == null) return cast 0;
+		#if cpp
+		var data:cpp.Pointer<Bytes> = Pointer.addressOf(pointer.bytes).incBy(pointer.offset);
+		#else
 		var data:Float = NativeCFFI.lime_bytes_get_data_pointer_offset (pointer.bytes, pointer.offset);
+		#end
 		return new DataPointer (data);
 		#elseif (js && !doc_gen)
 		return new DataPointer (new DataPointerObject (null, pointer.bytes.getData (), pointer.offset));
@@ -68,7 +86,11 @@ abstract DataPointer(DataPointerType) to DataPointerType {
 
 		#if (lime_cffi && !js && !macro)
 		if (arrayBufferView == null) return cast 0;
+		#if cpp
+		var data:cpp.Pointer<Bytes> = Pointer.addressOf(arrayBufferView.buffer).incBy(arrayBufferView.byteOffset);
+		#else
 		var data:Float = NativeCFFI.lime_bytes_get_data_pointer_offset (arrayBufferView.buffer, arrayBufferView.byteOffset);
+		#end
 		return new DataPointer (data);
 		#elseif (js && !doc_gen)
 		return new DataPointer (new DataPointerObject (arrayBufferView));
@@ -97,7 +119,11 @@ abstract DataPointer(DataPointerType) to DataPointerType {
 
 		#if (lime_cffi && !macro)
 		if (bytes == null) return cast 0;
+		#if cpp
+		var data:cpp.Pointer<Bytes> = Pointer.addressOf(bytes);
+		#else
 		var data:Float = NativeCFFI.lime_bytes_get_data_pointer (bytes);
+		#end
 		return new DataPointer (data);
 		#elseif (js && !doc_gen)
 		return fromArrayBuffer (bytes.getData ());
@@ -129,6 +155,7 @@ abstract DataPointer(DataPointerType) to DataPointerType {
 	}
 
 
+	#if !cpp
 	#if !lime_doc_gen
 	@:from @:noCompletion public static function fromCFFIPointer (pointer:CFFIPointer):DataPointer {
 
@@ -140,6 +167,7 @@ abstract DataPointer(DataPointerType) to DataPointerType {
 		#end
 
 	}
+	#end
 	#end
 
 
@@ -393,11 +421,15 @@ abstract DataPointer(DataPointerType) to DataPointerType {
 	#end
 
 
-	private static function __withOffset (data:DataPointer, offset:Int):DataPointer {
+	private static inline function __withOffset (data:DataPointer, offset:Int):DataPointer {
 
 		#if (lime_cffi && !macro)
 		if (data == 0) return cast 0;
+		#if cpp
+		var data:cpp.Pointer<Bytes> = data.add(offset);
+		#else
 		var data:Float = NativeCFFI.lime_data_pointer_offset (data, offset);
+		#end
 		return new DataPointer (data);
 		#else
 		return null;
@@ -405,9 +437,38 @@ abstract DataPointer(DataPointerType) to DataPointerType {
 
 	}
 
-
+	/*
+	#if cpp
+	
+	@:noCompletion @:op(A == B) private static inline function equals (a:DataPointer, b:Int):Bool { return a == b; }
+	@:noCompletion @:op(A == B) private static inline function equalsPointer (a:DataPointer, b:DataPointer):Bool { return a == b; }
+	@:noCompletion @:op(A > B) private static inline function greaterThan (a:DataPointer, b:Int):Bool { return a > b; }
+	#if !lime_doc_gen
+	@:noCompletion @:op(A > B) private static inline function greaterThanPointer (a:DataPointer, b:CFFIPointer):Bool { return a > b; }
+	#end
+	@:noCompletion @:op(A >= B) private static inline function greaterThanOrEqual (a:DataPointer, b:Int):Bool { return a >= b; }
+	#if !lime_doc_gen
+	@:noCompletion @:op(A >= B) private static inline function greaterThanOrEqualPointer (a:DataPointer, b:CFFIPointer):Bool { return a >= b; }
+	#end
+	@:noCompletion @:op(A < B) private static inline function lessThan (a:DataPointer, b:Int):Bool { a < b; }
+	#if !lime_doc_gen
+	@:noCompletion @:op(A < B) private static inline function lessThanPointer (a:DataPointer, b:CFFIPointer):Bool { return a < b; }
+	#end
+	@:noCompletion @:op(A <= B) private static inline function lessThanOrEqual (a:DataPointer, b:Int):Bool { return a <= b; }
+	#if !lime_doc_gen
+	@:noCompletion @:op(A <= B) private static inline function lessThanOrEqualPointer (a:DataPointer, b:CFFIPointer):Bool { return (a:Float) <= b; }
+	#end
+	@:noCompletion @:op(A != B) private static inline function notEquals (a:DataPointer, b:Int):Bool { return (a:Float) != b; }
+	@:noCompletion @:op(A != B) private static inline function notEqualsPointer (a:DataPointer, b:DataPointer):Bool { return (a:Float) != (b:Float); }
+	@:noCompletion @:op(A + B) private static inline function plus (a:DataPointer, b:Int):DataPointer { return __withOffset (a, b); }
+	@:noCompletion @:op(A + B) private static inline function plusPointer (a:DataPointer, b:DataPointer):DataPointer { return  __withOffset (a, Std.int ((b:Float))); }
+	@:noCompletion @:op(A - B) private static inline function minus (a:DataPointer, b:Int):DataPointer { return __withOffset (a, -b); }
+	@:noCompletion @:op(A - B) private static inline function minusPointer (a:DataPointer, b:DataPointer):DataPointer { return __withOffset (a, -Std.int ((b:Float))); }
+	
+	#else
+	*/
+	
 	@:noCompletion @:op(A == B) private static inline function equals (a:DataPointer, b:Int):Bool { return (a:Float) == b; }
-	@:noCompletion @:op(A == B) private static inline function equalsPointer (a:DataPointer, b:DataPointer):Bool { return (a:Float) == (b:Float); }
 	@:noCompletion @:op(A > B) private static inline function greaterThan (a:DataPointer, b:Int):Bool { return (a:Float) > b; }
 	#if !lime_doc_gen
 	@:noCompletion @:op(A > B) private static inline function greaterThanPointer (a:DataPointer, b:CFFIPointer):Bool { return (a:Float) > b; }
@@ -425,18 +486,30 @@ abstract DataPointer(DataPointerType) to DataPointerType {
 	@:noCompletion @:op(A <= B) private static inline function lessThanOrEqualPointer (a:DataPointer, b:CFFIPointer):Bool { return (a:Float) <= b; }
 	#end
 	@:noCompletion @:op(A != B) private static inline function notEquals (a:DataPointer, b:Int):Bool { return (a:Float) != b; }
-	@:noCompletion @:op(A != B) private static inline function notEqualsPointer (a:DataPointer, b:DataPointer):Bool { return (a:Float) != (b:Float); }
+	
 	@:noCompletion @:op(A + B) private static inline function plus (a:DataPointer, b:Int):DataPointer { return __withOffset (a, b); }
 	@:noCompletion @:op(A + B) private static inline function plusPointer (a:DataPointer, b:DataPointer):DataPointer { return  __withOffset (a, Std.int ((b:Float))); }
 	@:noCompletion @:op(A - B) private static inline function minus (a:DataPointer, b:Int):DataPointer { return __withOffset (a, -b); }
 	@:noCompletion @:op(A - B) private static inline function minusPointer (a:DataPointer, b:DataPointer):DataPointer { return __withOffset (a, -Std.int ((b:Float))); }
-
+	
+	#if cpp
+	@:noCompletion @:op(A == B) private static inline function equalsPointer (a:DataPointer, b:DataPointer):Bool { return a.raw == b.raw; }
+	@:noCompletion @:op(A != B) private static inline function notEqualsPointer (a:DataPointer, b:DataPointer):Bool { return a.raw != b.raw; }
+	#else
+	@:noCompletion @:op(A == B) private static inline function equalsPointer (a:DataPointer, b:DataPointer):Bool { return (a:Float) == (b:Float); }
+	@:noCompletion @:op(A != B) private static inline function notEqualsPointer (a:DataPointer, b:DataPointer):Bool { return (a:Float) != (b:Float); }
+	#end
+	
 
 }
 
 
 #if (lime_cffi && !js)
+#if cpp
+private typedef DataPointerType = cpp.Pointer<Bytes>;
+#else
 private typedef DataPointerType = Float;
+#end
 #else
 private typedef DataPointerType = Dynamic;
 
