@@ -8,6 +8,8 @@ import lime.utils.Bytes as LimeBytes;
 
 #if cpp
 import cpp.Pointer;
+import cpp.Char;
+import cpp.UInt8;
 #end
 
 #if (lime_cffi && !macro)
@@ -56,12 +58,18 @@ abstract DataPointer(DataPointerType) to DataPointerType {
 
 
 	#if cpp
-	@:generic @:from @:noCompletion public static inline function fromPointer<T> (pointer:Pointer<T>):DataPointer {
+	@:from @:noCompletion public static inline function fromCharPointer (pointer:Pointer<Char>):DataPointer {
 
 		return untyped __cpp__('(uintptr_t){0}', pointer.ptr);
 
 	}
-	#end
+	
+	@:from @:noCompletion public static inline function fromUint8Pointer (pointer:Pointer<UInt8>):DataPointer {
+
+		return untyped __cpp__('(uintptr_t){0}', pointer.ptr);
+
+	}
+	#end 
 
 
 	@:from @:noCompletion public static function fromBytesPointer (pointer:BytePointer):DataPointer {
@@ -154,6 +162,7 @@ abstract DataPointer(DataPointerType) to DataPointerType {
 
 
 	#if !lime_doc_gen
+	#if !cpp
 	@:from @:noCompletion public static function fromCFFIPointer (pointer:CFFIPointer):DataPointer {
 
 		#if (lime_cffi && !macro)
@@ -164,6 +173,7 @@ abstract DataPointer(DataPointerType) to DataPointerType {
 		#end
 
 	}
+	#end
 	#end
 
 
