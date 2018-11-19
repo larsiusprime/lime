@@ -717,11 +717,7 @@ namespace lime {
 
 			int size = std::wcslen (path->c_str ());
 			char* result = (char*)malloc (size);
-			#ifndef HX_MACOS
 			std::wcstombs (result, path->c_str (), size);
-			#else
-			wcstombs (result, path->c_str (), size);
-			#end
 			delete path;
 
 			return (vbyte*)result;
