@@ -38,36 +38,11 @@ class DeploymentHelper {
 			System.runCommand ("", "drive", args);
 
 		}
-		else if (targetFlags.exists ("skicka")) {
+		else if (targetFlags.exists ("butler")) {
 			
-			var targetDir = Path.combine(targetDirectory, "dist");
 			var destination = targetFlags.get("destination");
-			
-			if (destination != null && destination != "") {
-				
-				var args = [];
-				
-				if (targetFlags.exists("tokencache")) {
-					
-					args.push ("-tokencache");
-					args.push (targetFlags.get("tokencache"));
-					
-				}
-				
-				args.push("upload");
-				
-				if (targetFlags.exists("dry-run")) {
-					
-					args.push ("-dry-run");
-					
-				}
-				
-				args.push(targetDir);
-				args.push(destination);
-				
-				System.runCommand ("", "skicka", args);
-				
-			}
+			var args = ["push", targetPath, destination];
+			System.runCommand ("", "butler", args);
 			
 		}
 	}
