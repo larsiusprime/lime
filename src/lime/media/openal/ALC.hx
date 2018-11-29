@@ -37,6 +37,8 @@ class ALC {
 	public static inline var DEFAULT_ALL_DEVICES_SPECIFIER:Int = 0x1012;
 	public static inline var ALL_DEVICES_SPECIFIER:Int = 0x1013;
 
+	public static inline var MAX_AUXILIARY_SENDS = 0x20003;
+
 
 	public static function closeDevice (device:ALDevice):Bool {
 

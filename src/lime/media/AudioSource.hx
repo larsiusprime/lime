@@ -4,6 +4,7 @@ package lime.media;
 import lime.app.Event;
 import lime.media.openal.AL;
 import lime.media.openal.ALSource;
+import lime.media.effects.*;
 import lime.math.Vector4;
 
 #if !lime_debug
@@ -22,12 +23,16 @@ class AudioSource {
 	public var buffer:AudioBuffer;
 	public var currentTime (get, set):Int;
 	public var gain (get, set):Float;
+	public var pitch (get, set):Float;
 	public var length (get, set):Int;
 	public var loops (get, set):Int;
 	public var offset:Int;
 	public var position (get, set):Vector4;
 
 	@:noCompletion private var __backend:AudioSourceBackend;
+
+	private var effect:Effect;
+	private var filter:Filter;
 
 
 	public function new (buffer:AudioBuffer = null, offset:Int = 0, length:Null<Int> = null, loops:Int = 0) {
@@ -56,6 +61,16 @@ class AudioSource {
 
 	public function dispose ():Void {
 
+		if(filter != null) {
+			filter.removeSource(this);
+		}
+		if(effect != null) {
+			effect.removeSource(this);
+		}
+		
+		filter = null;
+		effect = null;
+
 		__backend.dispose ();
 		AudioManager.removeAudioSource(this);
 
@@ -72,6 +87,8 @@ class AudioSource {
 
 	public function update() {
 		__backend.update();
+		if(filter != null) filter.update();
+		if(effect != null) effect.update();
 	}
 
 
@@ -95,8 +112,53 @@ class AudioSource {
 
 	}
 
+	#if (cpp || neko)
 
+	// EFFECTS
 
+	public function useEffect(effect:Effect) {
+		if(this.effect != null) {
+			this.effect.removeSource(this);
+		}
+
+		this.effect = effect;
+		this.effect.addSource(this);
+	}
+
+	public function getEffect():Effect {
+		return effect;
+	}
+
+	public function removeEffect() {
+		if(effect != null) {
+			effect.removeSource(this);
+		}
+
+		effect = null;
+	}
+
+	public function useFilter(filter:Filter) {
+		if(this.filter != null) {
+			this.filter.removeSource(this);
+		}
+
+		this.filter = filter;
+		this.filter.addSource(this);
+	}
+
+	public function getFilter():Filter {
+		return filter;
+	}
+
+	public function removeFilter() {
+		if(filter != null) {
+			filter.removeSource(this);
+		}
+
+		filter = null;
+	}
+
+	#end
 
 	// Get & Set Methods
 
@@ -171,6 +233,37 @@ class AudioSource {
 		return __backend.setPosition (value);
 
 	}
+
+
+	#if (cpp || neko)
+
+	@:noCompletion private function get_pitch():Float {
+
+		return __backend.getPitch();
+
+	}
+
+	@:noCompletion private function set_pitch(value:Float):Float {
+
+		return __backend.setPitch(value);
+
+	}
+
+	#else
+
+	@:noCompletion private function get_pitch():Float {
+
+		return 1.0;
+
+	}
+
+	@:noCompletion private function set_pitch(value:Float):Float {
+
+		return value;
+
+	}
+
+	#end
 
 
 }

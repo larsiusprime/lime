@@ -378,4 +378,20 @@ class NativeAudioSource2 {
 		return position;
 	}
 
+	public function setPitch(value:Float) {
+		if(handle != null) {
+			AL.sourcef(handle, AL.PITCH, value);
+		}
+
+		return value;
+	}
+
+	public function getPitch():Float {
+		if(handle == null) {
+			return 1.0;
+		} 
+
+		return AL.getSourcef(handle, AL.PITCH);
+	}
+
 }

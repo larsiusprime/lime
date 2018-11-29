@@ -726,6 +726,9 @@ class NativeCFFI {
 	@:cffi private static function lime_al_delete_buffers (n:Int, buffers:Dynamic):Void;
 	@:cffi private static function lime_al_delete_source (source:CFFIPointer):Void;
 	@:cffi private static function lime_al_delete_sources (n:Int, sources:Dynamic):Void;
+	@:cffi private static function lime_al_delete_effect (effect:CFFIPointer):Void;
+	@:cffi private static function lime_al_delete_filter (filter:CFFIPointer):Void;
+	@:cffi private static function lime_al_delete_auxiliary_effect_slot (aux:CFFIPointer):Void;
 	@:cffi private static function lime_al_disable (capability:Int):Void;
 	@:cffi private static function lime_al_distance_model (distanceModel:Int):Void;
 	@:cffi private static function lime_al_doppler_factor (value:Float32):Void;
@@ -743,6 +746,10 @@ class NativeCFFI {
 	@:cffi private static function lime_al_get_bufferfv (buffer:CFFIPointer, param:Int, count:Int):Array<Float>;
 	@:cffi private static function lime_al_get_bufferi (buffer:CFFIPointer, param:Int):Int;
 	@:cffi private static function lime_al_get_bufferiv (buffer:CFFIPointer, param:Int, count:Int):Array<Int>;
+	@:cffi private static function lime_al_get_effectf (effect:CFFIPointer, param:Int):Float32;
+	@:cffi private static function lime_al_get_effecti (effect:CFFIPointer, param:Int):Int;
+	@:cffi private static function lime_al_get_filterf (filter:CFFIPointer, param:Int):Float32;
+	@:cffi private static function lime_al_get_filteri (filter:CFFIPointer, param:Int):Int;
 	@:cffi private static function lime_al_get_double (param:Int):Float;
 	@:cffi private static function lime_al_get_doublev (param:Int, count:Int):Array<Float>;
 	@:cffi private static function lime_al_get_enum_value (ename:String):Int;
@@ -839,6 +846,9 @@ class NativeCFFI {
 	private static var lime_al_delete_buffers = new cpp.Callable<Int->cpp.Object->cpp.Void> (cpp.Prime._loadPrime ("lime", "lime_al_delete_buffers", "iov", false));
 	private static var lime_al_delete_source = new cpp.Callable<cpp.Object->cpp.Void> (cpp.Prime._loadPrime ("lime", "lime_al_delete_source", "ov", false));
 	private static var lime_al_delete_sources = new cpp.Callable<Int->cpp.Object->cpp.Void> (cpp.Prime._loadPrime ("lime", "lime_al_delete_sources", "iov", false));
+	private static var lime_al_delete_effect = new cpp.Callable<cpp.Object->cpp.Void> (cpp.Prime._loadPrime ("lime", "lime_al_delete_effect", "ov", false));
+	private static var lime_al_delete_filter = new cpp.Callable<cpp.Object->cpp.Void> (cpp.Prime._loadPrime ("lime", "lime_al_delete_filter", "ov", false));
+	private static var lime_al_delete_auxiliary_effect_slot = new cpp.Callable<cpp.Object->cpp.Void> (cpp.Prime._loadPrime ("lime", "lime_al_delete_auxiliary_effect_slot", "ov", false));
 	private static var lime_al_disable = new cpp.Callable<Int->cpp.Void> (cpp.Prime._loadPrime ("lime", "lime_al_disable", "iv", false));
 	private static var lime_al_distance_model = new cpp.Callable<Int->cpp.Void> (cpp.Prime._loadPrime ("lime", "lime_al_distance_model", "iv", false));
 	private static var lime_al_doppler_factor = new cpp.Callable<cpp.Float32->cpp.Void> (cpp.Prime._loadPrime ("lime", "lime_al_doppler_factor", "fv", false));
@@ -856,6 +866,10 @@ class NativeCFFI {
 	private static var lime_al_get_bufferfv = new cpp.Callable<cpp.Object->Int->Int->cpp.Object> (cpp.Prime._loadPrime ("lime", "lime_al_get_bufferfv", "oiio", false));
 	private static var lime_al_get_bufferi = new cpp.Callable<cpp.Object->Int->Int> (cpp.Prime._loadPrime ("lime", "lime_al_get_bufferi", "oii", false));
 	private static var lime_al_get_bufferiv = new cpp.Callable<cpp.Object->Int->Int->cpp.Object> (cpp.Prime._loadPrime ("lime", "lime_al_get_bufferiv", "oiio", false));
+	private static var lime_al_get_effectf = new cpp.Callable<cpp.Object->Int->cpp.Float32> (cpp.Prime._loadPrime ("lime", "lime_al_get_effectf", "oif", false));
+	private static var lime_al_get_effecti = new cpp.Callable<cpp.Object->Int->Int> (cpp.Prime._loadPrime ("lime", "lime_al_get_effecti", "oii", false));
+	private static var lime_al_get_filterf = new cpp.Callable<cpp.Object->Int->cpp.Float32> (cpp.Prime._loadPrime ("lime", "lime_al_get_filterf", "oif", false));
+	private static var lime_al_get_filteri = new cpp.Callable<cpp.Object->Int->Int> (cpp.Prime._loadPrime ("lime", "lime_al_get_filteri", "oii", false));
 	private static var lime_al_get_double = new cpp.Callable<Int->Float> (cpp.Prime._loadPrime ("lime", "lime_al_get_double", "id", false));
 	private static var lime_al_get_doublev = new cpp.Callable<Int->Int->cpp.Object> (cpp.Prime._loadPrime ("lime", "lime_al_get_doublev", "iio", false));
 	private static var lime_al_get_enum_value = new cpp.Callable<String->Int> (cpp.Prime._loadPrime ("lime", "lime_al_get_enum_value", "si", false));
@@ -924,7 +938,6 @@ class NativeCFFI {
 	private static var lime_al_filterf = new cpp.Callable<cpp.Object->Int->cpp.Float32->cpp.Void> (cpp.Prime._loadPrime ("lime", "lime_al_filterf", "oifv", false));
 	private static var lime_al_remove_direct_filter = new cpp.Callable<cpp.Object->cpp.Void> (cpp.Prime._loadPrime ("lime", "lime_al_remove_direct_filter", "ov", false));
 	private static var lime_al_is_filter = new cpp.Callable<cpp.Object->Bool> (cpp.Prime._loadPrime ("lime", "lime_al_is_filter", "ob", false));
-	private static var lime_al_get_filteri = new cpp.Callable<cpp.Object->Int->Int> (cpp.Prime._loadPrime ("lime", "lime_al_get_filteri", "oii", false));
 	private static var lime_al_gen_effect = new cpp.Callable<Void->cpp.Object> (cpp.Prime._loadPrime ("lime", "lime_al_gen_effect", "o", false));
 	private static var lime_al_effectf = new cpp.Callable<cpp.Object->Int->cpp.Float32->cpp.Void> (cpp.Prime._loadPrime ("lime", "lime_al_effectf", "oifv", false));
 	private static var lime_al_effectfv = new cpp.Callable<cpp.Object->Int->cpp.Object->cpp.Void> (cpp.Prime._loadPrime ("lime", "lime_al_effectfv", "oiov", false));

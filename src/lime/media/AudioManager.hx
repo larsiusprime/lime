@@ -44,7 +44,10 @@ class AudioManager {
 					var alc = context.openal;
 
 					var device = alc.openDevice ();
-					var ctx = alc.createContext (device);
+
+					var attribs = [ALC.MAX_AUXILIARY_SENDS, 2];
+
+					var ctx = alc.createContext (device, attribs);
 					alc.makeContextCurrent (ctx);
 					alc.processContext (ctx);
 
@@ -113,9 +116,9 @@ class AudioManager {
 			var source = sourcesToRemove.pop();
 			if(audioSources.indexOf(source) != -1) {
 				audioSources.remove(source);
-			} 
+			}
 		}
-		
+
 	}
 
 

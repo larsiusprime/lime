@@ -1744,6 +1744,45 @@ namespace lime {
 
 	}
 
+	float lime_al_get_filterf (value filter, int param) {
+
+		#ifdef LIME_OPENALSOFT
+		ALuint id = (ALuint)(uintptr_t)val_data (filter);
+		ALfloat data;
+		alGetFilterf (id, param, &data);
+		return data;
+		#else
+		return 0;
+		#endif
+
+	}
+
+	int lime_al_get_effecti (value effect, int param) {
+
+		#ifdef LIME_OPENALSOFT
+		ALuint id = (ALuint)(uintptr_t)val_data (effect);
+		ALint data;
+		alGetEffecti (id, param, &data);
+		return data;
+		#else
+		return 0;
+		#endif
+
+	}
+
+	float lime_al_get_effectf (value effect, int param) {
+
+		#ifdef LIME_OPENALSOFT
+		ALuint id = (ALuint)(uintptr_t)val_data (effect);
+		ALfloat data;
+		alGetFilterf (id, param, &data);
+		return data;
+		#else
+		return 0;
+		#endif
+
+	}
+
 
 	HL_PRIM int hl_lime_al_get_filteri (HL_CFFIPointer* filter, int param) {
 
@@ -1751,6 +1790,47 @@ namespace lime {
 		ALuint id = (ALuint)(uintptr_t)filter->ptr;
 		ALint data;
 		alGetFilteri (id, param, &data);
+		return data;
+		#else
+		return 0;
+		#endif
+
+	}
+
+
+	HL_PRIM float hl_lime_al_get_filterf (HL_CFFIPointer* filter, int param) {
+
+		#ifdef LIME_OPENALSOFT
+		ALuint id = (ALuint)(uintptr_t)filter->ptr;
+		ALfloat data;
+		alGetFilterf (id, param, &data);
+		return data;
+		#else
+		return 0;
+		#endif
+
+	}
+
+	HL_PRIM int hl_lime_al_get_effecti (HL_CFFIPointer* effect, int param) {
+
+		#ifdef LIME_OPENALSOFT
+		ALuint id = (ALuint)(uintptr_t)effect->ptr;
+		ALint data;
+		alGetEffecti (id, param, &data);
+		return data;
+		#else
+		return 0;
+		#endif
+
+	}
+
+
+	HL_PRIM float hl_lime_al_get_effectf (HL_CFFIPointer* effect, int param) {
+
+		#ifdef LIME_OPENALSOFT
+		ALuint id = (ALuint)(uintptr_t)effect->ptr;
+		ALfloat data;
+		alGetEffectf (id, param, &data);
 		return data;
 		#else
 		return 0;
@@ -3522,11 +3602,14 @@ namespace lime {
 	DEFINE_PRIME3 (lime_al_get_bufferfv);
 	DEFINE_PRIME2 (lime_al_get_bufferi);
 	DEFINE_PRIME3 (lime_al_get_bufferiv);
+	DEFINE_PRIME2 (lime_al_get_filterf);
+	DEFINE_PRIME2 (lime_al_get_filteri);
+	DEFINE_PRIME2 (lime_al_get_effectf);
+	DEFINE_PRIME2 (lime_al_get_effecti);
 	DEFINE_PRIME1 (lime_al_get_double);
 	DEFINE_PRIME2 (lime_al_get_doublev);
 	DEFINE_PRIME1 (lime_al_get_enum_value);
 	DEFINE_PRIME0 (lime_al_get_error);
-	DEFINE_PRIME2 (lime_al_get_filteri);
 	DEFINE_PRIME1 (lime_al_get_float);
 	DEFINE_PRIME2 (lime_al_get_floatv);
 	DEFINE_PRIME1 (lime_al_get_integer);
@@ -3651,6 +3734,9 @@ namespace lime {
 	DEFINE_HL_PRIM (_I32, lime_al_get_enum_value, _STRING);
 	DEFINE_HL_PRIM (_I32, lime_al_get_error, _NO_ARG);
 	DEFINE_HL_PRIM (_I32, lime_al_get_filteri, _TCFFIPOINTER _I32);
+	DEFINE_HL_PRIM (_F32, lime_al_get_filterf, _TCFFIPOINTER _I32);
+	DEFINE_HL_PRIM (_I32, lime_al_get_effecti, _TCFFIPOINTER _I32);
+	DEFINE_HL_PRIM (_F32, lime_al_get_effectf, _TCFFIPOINTER _I32);
 	DEFINE_HL_PRIM (_F32, lime_al_get_float, _I32);
 	DEFINE_HL_PRIM (_ARR, lime_al_get_floatv, _I32 _I32);
 	DEFINE_HL_PRIM (_I32, lime_al_get_integer, _I32);

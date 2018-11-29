@@ -486,6 +486,29 @@ class AL {
 
 	}
 
+	public static function deleteEffect (effect:ALEffect):Void {
+
+		#if (lime_cffi && lime_openal && !macro)
+		NativeCFFI.lime_al_delete_effect (effect);
+		#end
+
+	}
+
+	public static function deleteFilter (filter:ALFilter):Void {
+
+		#if (lime_cffi && lime_openal && !macro)
+		NativeCFFI.lime_al_delete_filter (filter);
+		#end
+
+	}
+
+	public static function deleteAuxiliaryEffectSlot (slot:ALAuxiliaryEffectSlot):Void {
+
+		#if (lime_cffi && lime_openal && !macro)
+		NativeCFFI.lime_al_delete_auxiliary_effect_slot (slot);
+		#end
+
+	}
 
 	public static function disable (capability:Int):Void {
 
@@ -829,6 +852,30 @@ class AL {
 	public static function getFilteri(filter:ALFilter, param:Int):Int {
 		#if (lime_cffi && lime_openal && !macro)
 		return NativeCFFI.lime_al_get_filteri (filter, param);
+		#else
+		return 0;
+		#end
+	}
+
+	public static function getFilterf(filter:ALFilter, param:Int):Float {
+		#if (lime_cffi && lime_openal && !macro)
+		return NativeCFFI.lime_al_get_filterf (filter, param);
+		#else
+		return 0;
+		#end
+	}
+
+	public static function getEffecti(filter:ALEffect, param:Int):Int {
+		#if (lime_cffi && lime_openal && !macro)
+		return NativeCFFI.lime_al_get_effecti (filter, param);
+		#else
+		return 0;
+		#end
+	}
+
+	public static function getEffectf(filter:ALEffect, param:Int):Float {
+		#if (lime_cffi && lime_openal && !macro)
+		return NativeCFFI.lime_al_get_effectf (filter, param);
 		#else
 		return 0;
 		#end
