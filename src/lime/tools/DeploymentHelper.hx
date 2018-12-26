@@ -38,7 +38,13 @@ class DeploymentHelper {
 			System.runCommand ("", "drive", args);
 
 		}
-
+		else if (targetFlags.exists ("butler")) {
+			
+			var destination = targetFlags.get("destination");
+			var args = ["push", targetPath, destination];
+			System.runCommand ("", "butler", args);
+			
+		}
 	}
 
 
