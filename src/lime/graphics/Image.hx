@@ -1862,7 +1862,8 @@ class Image {
 			if (CFFI.enabled) {
 
 				#if !cs
-				buffer = NativeCFFI.lime_image_load_file (path, new ImageBuffer (new UInt8Array (Bytes.alloc (0))));
+				// Bytes.alloc(1) to work around a bug in lime C++. This is fixed in newer lime. - mauve
+				buffer = NativeCFFI.lime_image_load_file (path, new ImageBuffer (new UInt8Array (Bytes.alloc (1))));
 				#else
 				var data = NativeCFFI.lime_image_load_file (path, null);
 				if (data != null) {
